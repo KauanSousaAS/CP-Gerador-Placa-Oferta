@@ -1,6 +1,6 @@
 <?php
 
-class Item {
+class ItemModel {
     public $idItem;
     public $codigo;
     public $fkProduto;

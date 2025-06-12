@@ -1,6 +1,6 @@
 <?php
 
-class FilialProduto {
+class FilialProdutoModel {
     public $fkProduto;
     public $fkFilial;
     public $ultimoExibir;

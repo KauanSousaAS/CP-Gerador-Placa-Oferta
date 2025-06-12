@@ -1,28 +1,28 @@
 <?php
 
-require_once('config/token.php');
+require_once('../controllers/loginController.php');
 
-$sessao = new Token();
-
-$sessao->validarSessao();
-
+// validarSessao();
 
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SistemaPDO - Login</title>
 </head>
+
 <body>
-    <form action="php/login.php" method="post">
+    <form method="post">
         <label for="login">Login</label>
         <input type="text" id="login" name="login"><br>
         <label for="senha">Senha</label>
-        <input type="text" id="senha" name="senha"><br>
-        <button type="button">Logar</button>
+        <input type="password" id="senha" name="senha"><br>
+        <button type="button" onclick="logar();">Logar</button>
     </form>
 </body>
+<script src="/assets/js/loginView.js"></script>
 </html>

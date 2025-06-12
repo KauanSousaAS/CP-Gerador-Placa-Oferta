@@ -2,7 +2,7 @@
 
 require('conexao.php');
 
-class Preco {
+class PrecoModel {
     public $idPreco;
     public $venda;
     public $preco;

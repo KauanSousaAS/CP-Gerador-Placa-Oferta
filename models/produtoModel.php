@@ -1,7 +1,10 @@
 <?php
 
-class Produto
+require_once('../config/conexao.php');
+
+class ProdutoModel
 {
+    
     public $idProduto;
     public $descricao;
     public $manual;
