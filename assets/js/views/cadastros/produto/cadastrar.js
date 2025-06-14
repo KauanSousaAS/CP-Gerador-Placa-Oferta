@@ -17,7 +17,7 @@ const dadosCadastro = {
 };
 
 // Se for unitário, adiciona apenas valor unitário
-if (venda === 'UN') {
+if (venda === "UN") {
     dadosCadastro.valorUnt = {
         precoPr: document.getElementById('valorUntPr').value,
         precoMs: document.getElementById('valorUntMs').value
@@ -25,7 +25,7 @@ if (venda === 'UN') {
 }
 
 // Se for por quantidade, adiciona estrutura de quantidade
-if (venda === 'QN') {
+if (venda === "QN") {
     dadosCadastro.valorQnt = [
         {
             quantidade: document.getElementById('umQnt').value,
@@ -44,9 +44,6 @@ if (venda === 'QN') {
         }
     ];
 }
-
-
-    console.log(dadosCadastro);
 
     // Gera a requisição para encaminhamento das informações para o loginController.php.
     fetch('/index.php/produto/cadastrar', {
@@ -101,7 +98,7 @@ function verificarTipoVenda() {
     if (venda === "UN") {
         document.getElementById('telaValorUnitario').style.display = 'block';
         document.getElementById('telaValorQuantidade').style.display = 'none';
-    } else if (venda === "QT") {
+    } else if (venda === "QN") {
         document.getElementById('telaValorQuantidade').style.display = 'block';
         document.getElementById('telaValorUnitario').style.display = 'none';
     }

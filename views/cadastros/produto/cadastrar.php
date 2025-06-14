@@ -46,12 +46,12 @@ $controller->validarSessao();
                 <label for="volume">Volume:</label><br>
                 <select tabindex="4" name="volume" id="volume">
                     <option value="UN">Unidade</option>
-                    <option value="QL">Quilo</option>
+                    <option value="KG">Quilo</option>
                     <option value="MT">Metro</option>
                     <option value="RL">Rolo</option>
                     <option value="PR">Par</option>
                     <option value="CX">Caixa</option>
-                    <option value="CN">Cento</option>
+                    <option value="CT">Cento</option>
                     <option value="ML">Milheiro</option>
                 </select>
             </div>
@@ -85,15 +85,15 @@ $controller->validarSessao();
                 </div>
                 <div>
                     <label for="umQnt">Quantidade 1</label><br>
-                    <input type="int" name="umQnt" id="umQnt" min="1" max="999">
+                    <input type="number" name="umQnt" id="umQnt" min="1" max="999">
                 </div>
                 <div>
                     <label for="doisQnt">Quantidade 2</label><br>
-                    <input type="int" name="doisQnt" id="doisQnt" min="1" max="999">
+                    <input type="number" name="doisQnt" id="doisQnt" min="1" max="999">
                 </div>
                 <div>
                     <label for="tresQnt">Quantidade 3</label><br>
-                    <input type="int" name="tresQnt" id="tresQnt" min="1" max="999">
+                    <input type="number" name="tresQnt" id="tresQnt" min="1" max="999">
                 </div>
             </div>
 

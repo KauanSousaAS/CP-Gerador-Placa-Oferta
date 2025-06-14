@@ -24,21 +24,19 @@ class produtoController
             die();
         }
 
-        $venda = $dados['venda'];
-
-        switch ($venda) {
+        switch ($dados['venda']) {
             case "UN":
                 $precosRecebidos = $dados['valorUnt'];
 
                 $precos[] = $this->prepararPrecoParaCadastro(
-                    "UN",
+                    $dados['venda'],
                     $this->converterValorStringDouble($this->validarPreco($precosRecebidos['precoPr'])),
                     1,
                     "PR"
                 );
 
                 $precos[] = $this->prepararPrecoParaCadastro(
-                    "UN",
+                    $dados['venda'],
                     $this->converterValorStringDouble($this->validarPreco($precosRecebidos['precoMs'])),
                     1,
                     "MS"
@@ -47,27 +45,27 @@ class produtoController
             case "QN":
                 $precosRecebidos = $dados['valorQnt'];
 
-                $precos[] = null;
-
                 foreach ($precosRecebidos as $preco) {
+
                     $precos[] = $this->prepararPrecoParaCadastro(
-                        "QN",
+                        $dados['venda'],
                         $this->converterValorStringDouble($this->validarPreco($preco['precoPr'])),
                         intval($preco['quantidade']),
                         "PR"
                     );
 
                     $precos[] = $this->prepararPrecoParaCadastro(
-                        "QN",
+                        $dados['venda'],
                         $this->converterValorStringDouble($this->validarPreco($preco['precoMs'])),
                         intval($preco['quantidade']),
                         "MS"
                     );
                 }
-
-
                 break;
         }
+
+
+
 
         $status = $dados['status'] ? 1 : 0;
 
@@ -102,6 +100,18 @@ class produtoController
         }
 
         require_once(__DIR__ . '/../models/precoModel.php');
+
+        foreach ($precos as $preco) {
+            $precoModel = new precoModel();
+
+            $precoModel->venda = $preco['venda'];
+            $precoModel->preco = $preco['preco'];
+            $precoModel->quantidade = $preco['quantidade'];
+            $precoModel->uf = $preco['uf'];
+            $precoModel->fkProduto = $produtoModel->idProduto;
+
+            $precoModel->cadastrar();
+        }
 
         // codigo
         {
@@ -390,19 +400,19 @@ class produtoController
 
     private function validarPreco($precoValidar)
     {
-        if ($precoValidar == "") {
-            if (!preg_match('/^\d{1,9}([.,]\d{1,9})?$/', $precoValidar)) {
-                return $precoValidar;
-            } else {
-                http_response_code(400); // <-- Define o código de erro HTTP
-                echo json_encode(["erro" => "Insira valores válidos de preço! (xxxxxx,xx) ou (xxxxxx.xx)!"]);
-                die();
-            }
-        } else {
+        if (empty($precoValidar)) {
             http_response_code(400); // <-- Define o código de erro HTTP
             echo json_encode(["erro" => "Preencha todos os campos de preço do produto!"]);
             die();
         }
+
+        if (!preg_match('/^\d{1,9}([.,]\d{1,9})?$/', $precoValidar)) {
+            http_response_code(400); // <-- Define o código de erro HTTP
+            echo json_encode(["erro" => "Insira valores válidos de preço! (xxxxxx,xx ou xxxxxx.xx)!"]);
+            die();
+        }
+
+        return $precoValidar;
     }
 
     private function prepararPrecoParaCadastro($venda, $preco, $quantidade, $uf)
