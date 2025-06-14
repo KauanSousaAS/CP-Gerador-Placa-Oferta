@@ -1,1 +1,0 @@
-# CP-Gerador-Placa-Oferta

@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . '/../config/conexao.php');
+
 class FilialProdutoModel {
     public $fkProduto;
     public $fkFilial;

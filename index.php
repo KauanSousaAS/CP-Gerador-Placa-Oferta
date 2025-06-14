@@ -13,8 +13,17 @@ if($requestUri == '/' || $requestUri == '/index.php'){
 // Ativa a função 'iniciarSessao' de 'loginController.php'.
 if (strpos($requestUri, '/index.php/usuario/logar') === 0) {
 
-    require_once 'controllers/loginController.php';
-    $controller = new loginController();
+    require_once 'controllers/usuarioController.php';
+    $controller = new usuarioController();
     $controller->iniciarSessao();
+    
+}
+
+// Ativa a função 'iniciarSessao' de 'loginController.php'.
+if (strpos($requestUri, '/index.php/produto/cadastrar') === 0) {
+
+    require_once 'controllers/produtoController.php';
+    $controller = new produtoController();
+    $controller->cadastrar();
     
 }

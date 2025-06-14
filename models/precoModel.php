@@ -1,6 +1,6 @@
 <?php
 
-require('conexao.php');
+require_once(__DIR__ . '/../config/conexao.php');
 
 class PrecoModel {
     public $idPreco;
@@ -25,12 +25,6 @@ class PrecoModel {
         $stmt = $conn->prepare("INSERT INTO tb_preco (venda, preco, quantidade, uf, fk_produto) VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([$this->venda, $this->preco, $this->quantidade, $this->uf, $this->fkProduto]);
     }
-
-    // public function atualizar() {
-    //     $conn = getConexao();
-    //     $stmt = $conn->prepare("UPDATE tb_preco SET venda=?, preco=?, quantidade=?, uf=?, fk_produto=? WHERE id_preco=?");
-    //     return $stmt->execute([$this->venda, $this->preco, $this->quantidade, $this->uf, $this->fkProduto, $this->idPreco]);
-    // }
 
     public static function buscarPorId($id) {
         $conn = getConexao();

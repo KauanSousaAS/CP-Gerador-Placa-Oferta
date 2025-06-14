@@ -1,26 +1,25 @@
 <?php
 
+require_once(__DIR__ . '/../config/conexao.php');
+
 class ItemModel {
-    public $idItem;
     public $codigo;
     public $fkProduto;
 
-    public function __construct($idItem = null, $codigo = null, $fkProduto = null) {
-        $this->idItem = $idItem;
+    public function __construct($codigo = null, $fkProduto = null) {
         $this->codigo = $codigo;
         $this->fkProduto = $fkProduto;
     }
 
-    public function salvar() {
+    public function cadastrar() {
         $conn = getConexao();
         $stmt = $conn->prepare("INSERT INTO tb_item (codigo, fk_produto) VALUES (?, ?)");
-        return $stmt->execute([$this->codigo, $this->fkProduto]);
-    }
-
-    public function atualizar() {
-        $conn = getConexao();
-        $stmt = $conn->prepare("UPDATE tb_item SET codigo=?, fk_produto=? WHERE id_item=?");
-        return $stmt->execute([$this->codigo, $this->fkProduto, $this->idItem]);
+        $stmt->bind_param(
+            "ii",
+            $this->codigo,
+            $this->fkProduto
+        );
+        return $stmt->execute();
     }
 
     public static function buscarPorId($id) {
@@ -30,7 +29,7 @@ class ItemModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function deletar($id) {
+    public static function excluir($id) {
         $conn = getConexao();
         $stmt = $conn->prepare("DELETE FROM tb_item WHERE id_item = ?");
         return $stmt->execute([$id]);

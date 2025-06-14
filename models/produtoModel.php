@@ -1,6 +1,6 @@
 <?php
 
-require_once('../config/conexao.php');
+require_once(__DIR__ . '/../config/conexao.php');
 
 class ProdutoModel
 {
@@ -22,8 +22,17 @@ class ProdutoModel
 
     public function cadastrar() {
         $conn = getConexao();
-        $stmt = $conn->prepare("INSERT INTO tb_produto(id_produto, descricao, manual, volume, status) VALUES (?,?,?,?,?");
-        return $stmt->execute([$this->idProduto, $this->descricao, $this->manual, $this->volume, $this->status]);
+        $stmt = $conn->prepare("INSERT INTO tb_produto(descricao, manual, volume, status) VALUES (?,?,?,?)");
+        $stmt->bind_param(
+            "sisi",
+            $this->descricao,
+            $this->manual,
+            $this->volume,
+            $this->status
+        );
+        if($stmt->execute()){
+            $this->idProduto = $conn->insert_id;
+        }
     }
 
     public function atualizar(){

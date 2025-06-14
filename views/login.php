@@ -1,6 +1,6 @@
 <?php
 
-require_once('../controllers/loginController.php');
+// require_once('../controllers/usuarioController.php');
 
 // validarSessao();
 
@@ -24,5 +24,5 @@ require_once('../controllers/loginController.php');
         <button type="button" onclick="logar();">Logar</button>
     </form>
 </body>
-<script src="/assets/js/loginView.js"></script>
+<script src="/assets/js/views/login.js"></script>
 </html>

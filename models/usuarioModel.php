@@ -34,15 +34,15 @@ class UsuarioModel
         return $stmt->execute();
     }
 
-    public static function login($loginInput, $senhaInput)
+    public function login()
     {
-        require_once('config/conexao.php');
+        require_once(__DIR__ . '/../config/conexao.php');
 
         $conn = getConexao();
         $stmt = $conn->prepare("SELECT id_usuario, senha FROM tb_usuario WHERE login = ?");
         $stmt->bind_param(
             "s",
-            $loginInput
+            $this->login
         );
         $stmt->execute();
         $resultado = $stmt->get_result();
@@ -52,7 +52,7 @@ class UsuarioModel
             $senhaHash = $row['senha'];
 
             // Verificar a senha
-            if (password_verify($senhaInput, $senhaHash)) {
+            if (password_verify($this->senha, $senhaHash)) {
                 $id = $row['id_usuario'];
                 $token = bin2hex(random_bytes(16));
 
@@ -86,30 +86,17 @@ class UsuarioModel
         }
     }
 
-    public static function validarSessao()
+    public function validarSessao()
     {
-        require_once('../config/conexao.php');
-
-        // Inicia a sessão caso ainda não tenha sido feito.
-        if (!isset($_SESSION)) {
-            session_start();
-        }
-
-        // Verifica se há um usuário e um token registrados na sessão.
-        if (!isset($_SESSION['idUsuario']) || !isset($_SESSION['token'])) {
-            // Retorna nulo caso não exista dados nas sessões de id e token do usuário.
-            return null;
-        }
+        require_once(__DIR__ . '/../config/conexao.php');
 
         // Realiza a busca do usuário da sessão e recebe o id do usuário caso encontrado.
         $conn = getConexao();
         $stmt = $conn->prepare("SELECT id_usuario FROM tb_usuario WHERE id_usuario = ? AND token = ?");
-        $id = $_SESSION['idUsuario'];
-        $token = $_SESSION['token'];
         $stmt->bind_param(
             "is",
-            $id,
-            $token
+            $this->idUsuario,
+            $this->token
         );
         $stmt->execute();
         $usuario = $stmt->fetch();

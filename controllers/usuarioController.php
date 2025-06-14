@@ -1,6 +1,6 @@
 <?php
 
-class loginController
+class usuarioController
 {
     // Função usada para validar se o usuário está logado em uma conta.
     public function iniciarSessao()
@@ -19,10 +19,15 @@ class loginController
         }
 
         // Recebe o model de Usuário.
-        require_once('models/usuarioModel.php');
+        require_once(__DIR__ . '/../models/usuarioModel.php');
 
+        $controller = new UsuarioModel();
+
+        $controller->login = $login;
+        $controller->senha = $senha;
+        
         // Inicia a função de login do model de Usuário.
-        $resultado = UsuarioModel::login($login, $senha);
+        $resultado = $controller->login();
 
         switch ($resultado) {
             case 2:
@@ -46,12 +51,28 @@ class loginController
     // Função usada para validar se o usuário está logado em uma conta.
     public function validarSessao()
     {
+        // Inicia a sessão caso ainda não tenha sido feito.
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        
+        // Verifica se há um usuário e um token registrados na sessão.
+        if (!isset($_SESSION['idUsuario']) || !isset($_SESSION['token'])) {
+            // Retorna nulo caso não exista dados nas sessões de id e token do usuário.
+            return null;
+        }
+        
         // Recebe o model de Usuário.
-        require_once('../models/usuarioModel.php');
+        require_once(__DIR__ . '/../models/usuarioModel.php');
+
+        $controller = new UsuarioModel();
+
+        $controller->idUsuario = $_SESSION['idUsuario'];
+        $controller->token = $_SESSION['token'];
 
         // Inicia a função de verificação de login/sessão do Usuário.
-        if (!UsuarioModel::validarSessao()) {
-            header("Location: ../views/login.php");
+        if (!$controller->validarSessao()) {
+            header("Location: /views/login.php");
             exit();
         }
     }
