@@ -64,9 +64,6 @@ class produtoController
                 break;
         }
 
-
-
-
         $status = $dados['status'] ? 1 : 0;
 
         $manual = $dados['manual'] ? 1 : 0;
@@ -113,7 +110,22 @@ class produtoController
             $precoModel->cadastrar();
         }
 
-        header("Location: /views/cadastros/produto/");
+        // Redireciona para a página de produtos após o cadastro
+        http_response_code(201); // <-- Define o código de sucesso HTTP
+        echo json_encode([
+            'redirect' => './',
+        ]);
+    }
+
+    public function listar()
+    {
+        require_once(__DIR__ . '/../models/produtoModel.php');
+
+        $produtoModel = new produtoModel();
+
+        $produtos = $produtoModel->listar();
+
+        echo json_encode($produtos);
     }
 
     private function validarPreco($precoValidar)

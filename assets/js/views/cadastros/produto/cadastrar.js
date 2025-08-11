@@ -65,19 +65,18 @@ if (venda === "QN") {
                     }
                 });
             }
-            return response.text();
+            return response.json();
         })
         .then(data => {
-            console.log(data);
-
-            // if (data.redirect) {
-            //     window.location.href = data.redirect;
-            // } else if (data.erroLogin || data.erro) {
-            //     alert(data.erroLogin || data.erro);
-            // }
-
-            // Ativa novamente o botão de Salvar após a resposta da requisição.
-            document.getElementById('butaoCadastrar').disabled = false;
+            // Exibe uma mensagem de sucesso.
+            alert('Produto cadastrado com sucesso!');
+            
+            // Redireciona para a página de listagem de produtos.
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else if (data.erroLogin || data.erro) {
+                alert(data.erroLogin || data.erro);
+            }
         })
         .catch(error => {
             // Ativa novamente o botão de Salvar após a resposta da requisição.
