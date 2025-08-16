@@ -29,30 +29,6 @@ $controller->validarSessao();
             </tr>
         </thead>
         <tbody id="listaProdutos">
-            <tr>
-                <td><input type="checkbox"></td>
-                <td><button>x</button></td>
-                <td>xxxxxxxxxxxxxx</td>
-                <td><button>$</button></td>
-                <td>xxx</td>
-                <td><button>x</button><button>x</button><button>x</button></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td><button>x</button></td>
-                <td>xxxxxxxxxxxxxx</td>
-                <td><button>$</button></td>
-                <td>xxx</td>
-                <td><button>x</button><button>x</button><button>x</button></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td><button>x</button></td>
-                <td>xxxxxxxxxxxxxx</td>
-                <td><button>$</button></td>
-                <td>xxx</td>
-                <td><button>x</button><button>x</button><button>x</button></td>
-            </tr>
         </tbody>
     </table>
     <a href="../"><button>Voltar</button></a>
@@ -71,6 +47,11 @@ $controller->validarSessao();
     <a href="cadastrar.php"><button>Cadastrar</button></a>
 </body>
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/produto.css">
-<script src="/assets/js/views/cadastros/produto/listar.js"></script>
+<script src="/assets/js/views/cadastros/produto/produto.js"></script>
+
+<script>
+    // Iniciar a requisição para listar os produtos.
+    listarProdutos();
+</script>
 
 </html>

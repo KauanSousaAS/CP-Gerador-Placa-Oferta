@@ -23,7 +23,7 @@ class ProdutoModel
     public function listar()
     {
         $conn = getConexao();
-        $stmt = $conn->prepare("SELECT id_produto, descricao, manual, volume, status FROM tb_produto");
+        $stmt = $conn->prepare("SELECT id_produto, descricao, status FROM tb_produto");
 
         if (!$stmt) {
             throw new Exception("Erro ao preparar consulta: " . $conn->error);

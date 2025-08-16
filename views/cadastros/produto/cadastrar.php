@@ -140,6 +140,11 @@ $controller->validarSessao();
     <button id="butaoCadastrar" onclick="cadastrar();">Salvar</button>
 </body>
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/cadastrar.css">
-<script src="/assets/js/views/cadastros/produto/cadastrar.js"></script>
+<script src="/assets/js/views/cadastros/produto/produto.js"></script>
+
+<script>
+    // Garante que tipoVenda seja iniciado para o cadastro.
+    verificarTipoVenda();
+</script>
 
 </html>
