@@ -1,4 +1,5 @@
 function listarProdutos() {
+
     fetch('/index.php/produto/listar', {
         method: 'POST',
         headers: {
@@ -17,34 +18,39 @@ function listarProdutos() {
                     }
                 });
             }
-            return response.json();
+            return response.text();
         })
         .then(data => {
 
+            // Chama o construtor de elementos HTML
+            const construtor = new Construtor();
+
             console.log(data);
 
-            let produtos = '';
+            // Exibe os produtos na tabela
+            let listaProduto = document.getElementById('listaProdutos');
             data.forEach(function (produto) {
-                if (produto.manual == 1) {
-                    produto.manual = 'Sim';
-                } else {
-                    produto.manual = 'Não';
-                }
 
-                console.log(produto);
+                // Cria uma nova linha na tabela para cada produto
+                let linhaProduto = construtor.criar("tr", {}, [
+                    construtor.criar("td", {}, [
+                        construtor.criar("input", {
+                            type: "checkbox",
+                            value: produto.id_produto
+                        })
+                    ]),
+                    construtor.criar("td", {}, [produto.id_produto]),
+                    construtor.criar("td", {}, [produto.descricao]),
+                    construtor.criar("td", {}, [produto.volume]),
+                    construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
+                    construtor.criar("td", {}, [
+                        construtor.criar("button", {}, ["Excluir"])
+                    ])
+                ]);
 
-
-                produtos += `
-                    <tr>
-                        <td><input type="checkbox" value="${produto.id_produto}"></td>
-                        <td>${produto.id_produto}</td>
-                        <td>${produto.descricao}</td>
-                        <td>${produto.volume}</td >
-                        <td>${produto.manual}</td >
-                        <td><button class="btn btn-danger">Excluir</button></td>
-                    </tr>`;
+                // Adiciona a linha à tabela
+                listaProduto.appendChild(linhaProduto);
             });
-            document.getElementById('listaProdutos').innerHTML = produtos;
 
         })
         .catch(error => {

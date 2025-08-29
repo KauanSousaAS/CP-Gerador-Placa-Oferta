@@ -120,10 +120,22 @@ class produtoController
     public function listar()
     {
         require_once(__DIR__ . '/../models/produtoModel.php');
+        require_once(__DIR__ . '/../models/itemModel.php');
 
         $produtoModel = new produtoModel();
+        $itemModel = new itemModel();
 
-        $produtos = $produtoModel->listar();
+        $produtos = $produtoModel->listarProdutos();
+
+        // require_once(__DIR__ . '/../models/precoModel.php');
+
+        // $precoModel = new precoModel();
+
+        // $produtos['precos'] = $precoModel->listarPrecos($produtos[]);
+
+        foreach ($produtos as &$produto) {
+            $produto['codigos'] = $itemModel->buscarPorId($produto['id_produto']);
+        }
 
         echo json_encode($produtos);
     }

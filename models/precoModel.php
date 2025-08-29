@@ -32,10 +32,10 @@ class PrecoModel {
         return $stmt->execute();
     }
 
-    public static function buscarPorId($id) {
+    public static function listarPrecos($produtos) {
         $conn = getConexao();
         $stmt = $conn->prepare("SELECT * FROM tb_preco WHERE id_preco = ?");
-        $stmt->execute([$id]);
+        $stmt->execute([]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

@@ -48,6 +48,7 @@ $controller->validarSessao();
 </body>
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/produto.css">
 <script src="/assets/js/views/cadastros/produto/produto.js"></script>
+<script src="/assets/js/views/util/contrutor.js"></script>
 
 <script>
     // Iniciar a requisição para listar os produtos.

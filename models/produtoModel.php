@@ -20,7 +20,7 @@ class ProdutoModel
         $this->status = $status;
     }
 
-    public function listar()
+    public function listarProdutos()
     {
         $conn = getConexao();
         $stmt = $conn->prepare("SELECT id_produto, descricao, status FROM tb_produto");

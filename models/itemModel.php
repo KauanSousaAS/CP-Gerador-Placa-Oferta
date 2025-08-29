@@ -24,9 +24,21 @@ class ItemModel {
 
     public static function buscarPorId($id) {
         $conn = getConexao();
-        $stmt = $conn->prepare("SELECT * FROM tb_item WHERE id_item = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $conn->prepare("SELECT codigo FROM tb_item WHERE fk_produto = ?");
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $conn->error);
+        }
+
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+
+        $codigos = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $codigos[] = $row;
+        }
+
+        return $codigos;
     }
 
     public static function excluir($id) {
