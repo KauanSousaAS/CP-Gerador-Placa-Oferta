@@ -121,20 +121,16 @@ class produtoController
     {
         require_once(__DIR__ . '/../models/produtoModel.php');
         require_once(__DIR__ . '/../models/itemModel.php');
+        // require_once(__DIR__ . '/../models/precoModel.php');
 
         $produtoModel = new produtoModel();
         $itemModel = new itemModel();
+        // $precoModel = new precoModel();
 
         $produtos = $produtoModel->listarProdutos();
 
-        // require_once(__DIR__ . '/../models/precoModel.php');
-
-        // $precoModel = new precoModel();
-
-        // $produtos['precos'] = $precoModel->listarPrecos($produtos[]);
-
         foreach ($produtos as &$produto) {
-            $produto['codigos'] = $itemModel->buscarPorId($produto['id_produto']);
+            $produto['codigos'] = $itemModel->buscarPorId(intval($produto['id_produto']));
         }
 
         echo json_encode($produtos);

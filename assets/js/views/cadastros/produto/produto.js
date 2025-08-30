@@ -18,14 +18,12 @@ function listarProdutos() {
                     }
                 });
             }
-            return response.text();
+            return response.json();
         })
         .then(data => {
 
             // Chama o construtor de elementos HTML
             const construtor = new Construtor();
-
-            console.log(data);
 
             // Exibe os produtos na tabela
             let listaProduto = document.getElementById('listaProdutos');
@@ -39,9 +37,21 @@ function listarProdutos() {
                             value: produto.id_produto
                         })
                     ]),
-                    construtor.criar("td", {}, [produto.id_produto]),
-                    construtor.criar("td", {}, [produto.descricao]),
-                    construtor.criar("td", {}, [produto.volume]),
+                    construtor.criar("td", {}, [
+                        construtor.criar("a", {
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
+                        }, [
+                            produto.codigos.join(";")
+                        ])
+                    ]),
+                    construtor.criar("td", {}, [
+                        construtor.criar("a", {
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
+                        }, [
+                            produto.descricao 
+                        ])
+                    ]),
+                    construtor.criar("td", {}, ["visualizar"]),
                     construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
                     construtor.criar("td", {}, [
                         construtor.criar("button", {}, ["Excluir"])

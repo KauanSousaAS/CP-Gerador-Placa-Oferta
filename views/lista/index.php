@@ -15,6 +15,15 @@ $controller->validarSessao();
 </head>
 <body>
     <h3>Lista</h3>
+    <table>
+        <thead>
+            <tr>
+                <th><h4>Filiais</h4></th>
+            </tr>
+        </thead>
+        <tbody id="listaProdutos">
+        </tbody>
+    </table>
     <a href="../"><button>Voltar</button></a>
 </body>
 </html>
