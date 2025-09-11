@@ -17,17 +17,39 @@ $controller->validarSessao();
     <h3>Filial</h3>
     <table>
         <thead>
-            <th class="width10">Código(s)</th>
-            <th class="textoEsquerda">Descrição</th>
-            <th class="width10">Preço(s)</th>
-            <th class="width20">Ações</th>
+            <tr>
+                <th></th>
+                <th class="textoEsquerda">Filial</th>
+                <th>UF</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
         </thead>
-        <tbody>
-
+        <tbody id="listaFiliais">
         </tbody>
     </table>
-    
     <a href="../"><button>Voltar</button></a>
+    <select name="selecao" id="selecao">
+        <option selected> -- sem seleção -- </option>
+        <option value="1">Todos</option>
+        <option value="2">Pendêntes</option>
+    </select>
+    <select name="acao" id="acao">
+        <option selected> -- sem ação -- </option>
+        <option value="exibir">Exibir</option>
+        <option value="concluir">Concluir</option>
+        <option value="excluir">Excluir</option>
+    </select>
+    <button type="button" onclick="acoesExecutar(document.getElementById('acao').value);">Executar</button>
+    <a href="cadastrar.php"><button>Cadastrar</button></a>
 </body>
-<link rel="stylesheet" href="/assets/css/lista.css">
+
+<link rel="stylesheet" href="/assets/css/views/cadastros/filial.css">
+<script src="/assets/js/views/util/contrutor.js"></script>
+<script src="/assets/js/views/cadastros/filial.js"></script>
+
+<script>
+    // Iniciar a requisição para listar os produtos.
+    listarFilial();
+</script>
 </html>

@@ -142,7 +142,7 @@ function cadastrar() {
         })
         .then(data => {
             // Exibe uma mensagem de sucesso.
-            alert('Produto cadastrado com sucesso!');
+            // alert('Produto cadastrado com sucesso!');
 
             // Redireciona para a página de listagem de produtos.
             if (data.redirect) {

@@ -10,6 +10,7 @@ class ProdutoModel
     public $manual;
     public $volume;
     public $status;
+    private $conexao;
 
     public function __construct($idProduto = null, $descricao = null, $manual = null, $volume = null, $status = null)
     {
@@ -18,15 +19,15 @@ class ProdutoModel
         $this->manual = $manual;
         $this->volume = $volume;
         $this->status = $status;
+        $this->conexao = getConexao();
     }
 
     public function listarProdutos()
     {
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT id_produto, descricao, status FROM tb_produto");
+        $stmt = $this->conexao->prepare("SELECT id_produto, descricao, status FROM tb_produto");
 
         if (!$stmt) {
-            throw new Exception("Erro ao preparar consulta: " . $conn->error);
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
         }
 
         $stmt->execute();
@@ -42,8 +43,7 @@ class ProdutoModel
 
     public function cadastrar()
     {
-        $conn = getConexao();
-        $stmt = $conn->prepare("INSERT INTO tb_produto(descricao, manual, volume, status) VALUES (?,?,?,?)");
+        $stmt = $this->conexao->prepare("INSERT INTO tb_produto(descricao, manual, volume, status) VALUES (?,?,?,?)");
         $stmt->bind_param(
             "sisi",
             $this->descricao,
@@ -52,29 +52,7 @@ class ProdutoModel
             $this->status
         );
         if ($stmt->execute()) {
-            $this->idProduto = $conn->insert_id;
+            $this->idProduto = $this->conexao->insert_id;
         }
-    }
-
-    public function atualizar()
-    {
-        $conn = getConexao();
-        $stmt = $conn->prepare("UPDATE tb_produto SET id_produto=?, descricao =?, manual=? ,volume=? ,status=? WHERE 1");
-        return $stmt->execute([$this->idProduto, $this->descricao, $this->manual, $this->volume, $this->status]);
-    }
-
-    public function buscarPorId($id)
-    {
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT * FROM tb_produto WHERE id_produto = ?");
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function deletar($id)
-    {
-        $conn = getConexao();
-        $stmt = $conn->prepare("DELETE FROM tb_produto WHERE id_produto = ?");
-        return $stmt->execute([$id]);
     }
 }

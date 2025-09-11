@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../../controllers/usuarioController.php');
+require_once('../../../../controllers/usuarioController.php');
 
 $controller = new usuarioController();
 $controller->validarSessao();
@@ -136,11 +136,11 @@ $controller->validarSessao();
 
         <br>
     </form>
-    <a href="index.php"><button>Cancelar</button></a>
+    <a href="../"><button>Cancelar</button></a>
     <button id="butaoCadastrar" onclick="cadastrar();">Salvar</button>
 </body>
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/cadastrar.css">
-<script src="/assets/js/views/cadastros/produto/produto.js"></script>
+<script src="/assets/js/views/cadastros/produto.js"></script>
 
 <script>
     // Garante que tipoVenda seja iniciado para o cadastro.

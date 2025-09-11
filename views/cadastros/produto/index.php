@@ -44,11 +44,12 @@ $controller->validarSessao();
         <option value="excluir">Excluir</option>
     </select>
     <button type="button" onclick="acoesExecutar(document.getElementById('acao').value);">Executar</button>
-    <a href="cadastrar.php"><button>Cadastrar</button></a>
+    <a href="cadastrar"><button>Cadastrar</button></a>
 </body>
+
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/produto.css">
-<script src="/assets/js/views/cadastros/produto/produto.js"></script>
 <script src="/assets/js/views/util/contrutor.js"></script>
+<script src="/assets/js/views/cadastros/produto.js"></script>
 
 <script>
     // Iniciar a requisição para listar os produtos.

@@ -2,44 +2,95 @@
 
 require_once(__DIR__ . '/../config/conexao.php');
 
-class FilialProdutoModel {
+class FilialProdutoModel
+{
     public $fkProduto;
     public $fkFilial;
     public $ultimoExibir;
     public $estoqueFilial;
     public $status;
+    private $conexao;
 
-    public function __construct($fkProduto = null, $fkFilial = null, $ultimoExibir = null, $estoqueFilial = null, $status = null) {
+    public function __construct($fkProduto = null, $fkFilial = null, $ultimoExibir = null, $estoqueFilial = null, $status = null)
+    {
         $this->fkProduto = $fkProduto;
         $this->fkFilial = $fkFilial;
         $this->ultimoExibir = $ultimoExibir;
         $this->estoqueFilial = $estoqueFilial;
         $this->status = $status;
+        $this->conexao = getConexao();
     }
 
-    public function associar() {
-        $conn = getConexao();
-        $stmt = $conn->prepare("INSERT INTO tb_filial_produto(fk_produto, fk_filial, ultimo_exibir, estoque_filial, status) VALUES (?,?,?,?,?");
-        return $stmt->execute([$this->fkProduto, $this->fkFilial, $this->ultimoExibir, $this->estoqueFilial, $this->status]);
+    public function listar($id_filial)
+    {
+
+        if ($id_filial === null) {
+            throw new Exception("ID da filial não fornecido.");
+        }
+
+        $sql = "SELECT * FROM tb_filial_produto WHERE fk_filial = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bind_param("i", $id_filial);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        if (!$stmt->execute()) {
+            throw new Exception("Erro ao executar consulta: " . $stmt->error);
+        }
+
+        $resultado = $stmt->get_result();
+
+        if (!$resultado) {
+            throw new Exception("Erro ao obter resultados: " . $stmt->error);
+        }
+
+        $produtosFilial = $resultado->fetch_all();
+
+        return $produtosFilial;
     }
 
-    public function listaExibida($produto, $filial){
-        $conn = getConexao();
-        $stmt = $conn->prepare("UPDATE tb_filial_produto SET ultimo_exibir=? ,status=? WHERE fk_produto = ? AND fk_filial");
-        $ultimoEbixir = date('Y-m-d H:i:s');
-        return $stmt->execute([$this->fkProduto, $this->fkFilial, $this->ultimoExibir, $this->estoqueFilial, $this->status]);
-    }
 
-    public function buscarPorId($id){
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT * FROM tb_produto WHERE id_produto = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC); 
-    }
+    public function pesquisarProdutoFilial($id_filial, $pesquisa)
+    {
+        $pesquisa = "%" . $pesquisa . "%";
 
-    public function deletar($id){
-        $conn = getConexao();
-        $stmt = $conn->prepare("DELETE FROM tb_filial_produto WHERE id_produto = ?");
-        return $stmt->execute([$id]);
+        $sql = "SELECT p.id_produto, i.codigo, p.descricao
+                FROM tb_item i
+                INNER JOIN tb_produto p ON p.id_produto = i.fk_produto
+                WHERE p.id_produto NOT IN(
+                    SELECT pf.fk_produto 
+                    FROM tb_filial_produto pf
+                    WHERE pf.fk_filial = ?
+                ) 
+                AND (i.codigo LIKE ? OR p.descricao LIKE ?)
+                AND p.status = 1
+                ;";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("iss", $id_filial, $pesquisa, $pesquisa);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
+        }
+
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+
+        $pesquisa = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $pesquisa[] = $row;
+        }
+
+        return $pesquisa;
     }
 }
