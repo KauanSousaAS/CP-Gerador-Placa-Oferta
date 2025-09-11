@@ -26,7 +26,6 @@ $controller->validarSessao();
     
     <input type="text" name="pesquisarProduto" id="pesquisarProduto" placeholder="Pesquisar..." onkeyup="pesquisarProdutoFilial(this.value);">
     <div id="resultadoPesquisa" class="resultadoPesquisa"></div>
-    <input type="button" onclick="adicionarProdutoFilial()" value="Adicionar">
     <a href="../cadastros/produto/cadastrar/"><button>Cadastrar</button></a>
 
     <table>

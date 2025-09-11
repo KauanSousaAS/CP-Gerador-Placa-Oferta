@@ -107,12 +107,12 @@ function pesquisarProdutoFilial() {
             agrupado.forEach(function (produto) {
 
                 let linhaProduto = construtor.criar("div", {}, [produto.codigos + " - " + produto.descricao + " ",
-                construtor.criar('button', {
-                    type: 'button',
-                    onclick: `vincularFilialProduto(${produto.id_produto})`
+                construtor.criar("button", {
+                    type: "button",
+                    onclick: () => vincularProdutoFilial(produto.id_produto)
                 }, ['+'])
                 ]);
-                
+
                 resultadoPesquisa.appendChild(linhaProduto);
 
                 resultadoPesquisa.style.display = "block";
@@ -154,3 +154,40 @@ function carregarProdutoFilial(id_filial) {
             console.error('Erro na requisição:', error);
         });
 }
+
+function vincularProdutoFilial(id_produto) {
+    fetch('/index.php/filialProduto/vincular', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id_filial: document.getElementById('seletorFilial').value,
+            id_produto: id_produto
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                // Se status for 400, 404, 500 etc.
+                return response.json().then(err => {
+                    // Exibi o erro no console, caso houver.
+                    if (err.erro != null) {
+                        alert(err.erro);
+                    } else {
+                        throw new Error("Erro desconhecido");
+                    }
+                }
+                );
+            }
+            return response.text();
+        }
+        )
+        .then(data => {
+            pesquisarProdutoFilial();
+        }
+        )
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+        });
+}
+

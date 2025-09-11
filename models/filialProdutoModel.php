@@ -93,4 +93,27 @@ class FilialProdutoModel
 
         return $pesquisa;
     }
+
+    public function vincular($id_produto, $id_filial)
+    {
+        $sql = "INSERT INTO tb_filial_produto (fk_produto, fk_filial, ultimo_exibir, estoque_filial, status) VALUES (?, ?, now(), 0, 2);";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("ii", $id_produto, $id_filial);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
+        }
+
+        if ($stmt->execute()) {
+            return ["success" => true, "message" => "Produto vinculado à filial com sucesso."];
+        } else {
+            return ["success" => false, "message" => "Erro ao vincular produto à filial: " . $stmt->error];
+        }
+    }
 }
