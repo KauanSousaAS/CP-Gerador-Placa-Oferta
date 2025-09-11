@@ -145,7 +145,7 @@ function carregarProdutoFilial(id_filial) {
                     }
                 });
             }
-            return response.text();
+            return response.json();
         })
         .then(data => {
             console.log(data);

@@ -7,10 +7,20 @@ class filialProdutoController
         $dados = json_decode(file_get_contents('php://input'), true);
 
         require_once(__DIR__ . '/../models/filialProdutoModel.php');
+        require_once(__DIR__ . '/../models/produtoModel.php');
 
         $filialProdutoModel = new filialProdutoModel();
 
+        $produtoModel = new produtoModel();
+
         $filialProdutos = $filialProdutoModel->listar($dados['id_filial']);
+
+        $resultado = [];
+
+        foreach ($filialProdutos as &$produto) {
+            // $descricao = $produtoModel->buscarPorId($produto['fk_produto']);
+            // $produto = array_merge($produto, $descricao);
+        }
 
         echo json_encode($filialProdutos);
     }
@@ -29,7 +39,8 @@ class filialProdutoController
         // echo json_encode($dados);
     }
 
-    public function vincular(){
+    public function vincular()
+    {
         $dados = json_decode(file_get_contents('php://input'), true);
 
         require_once(__DIR__ . '/../models/filialProdutoModel.php');

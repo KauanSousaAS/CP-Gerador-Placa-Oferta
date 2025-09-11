@@ -47,10 +47,13 @@ class FilialProdutoModel
         if (!$resultado) {
             throw new Exception("Erro ao obter resultados: " . $stmt->error);
         }
+        
+        $lista = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $lista[] = $row;
+        }
 
-        $produtosFilial = $resultado->fetch_all();
-
-        return $produtosFilial;
+        return $lista;
     }
 
 
