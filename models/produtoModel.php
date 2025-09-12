@@ -55,4 +55,36 @@ class ProdutoModel
             $this->idProduto = $this->conexao->insert_id;
         }
     }
+
+    public function buscar($id)
+    {
+        $sql = "SELECT id_produto, descricao, manual, volume, status FROM tb_produto";
+
+        if(!($id === null)) {
+            $sql .= " WHERE id_produto = ?";
+        }
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bind_param("i", $id);
+        
+        if(!($id === null)) {
+            $sql .= " WHERE id_produto = ?";
+        }
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        
+        $produtos = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $produtos[] = $row;
+        }
+
+        return $produtos;
+    }
 }

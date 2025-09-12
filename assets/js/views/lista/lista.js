@@ -149,6 +149,49 @@ function carregarProdutoFilial(id_filial) {
         })
         .then(data => {
             console.log(data);
+
+            $listaProdutosFilial = document.getElementById("listaProdutosFilial");
+
+            $listaProdutosFilial.innerHTML = "";
+
+            // Chama o construtor de elementos HTML
+            const construtor = new Construtor();
+
+            data.forEach(function (produto) {
+                // Cria uma nova linha na tabela para cada produto
+                let linhaProduto = construtor.criar("tr", {}, [
+                    construtor.criar("td", {}, [
+                        construtor.criar("input", {
+                            type: "checkbox",
+                            value: produto.fk_produto
+                        })
+                    ]),
+                    construtor.criar("td", {}, [
+                        construtor.criar("a", {
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.fk_produto}`
+                        }, [
+                            produto.codigos.join(";")
+                        ])
+                    ]),
+                    construtor.criar("td", {}, [
+                        construtor.criar("a", {
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.fk_produto}`
+                        }, [
+                            produto.descricao
+                        ])
+                    ]),
+                    construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
+                    construtor.criar("td", {}, [produto.estoque_filial]),
+                    construtor.criar("td", {}, [produto.status == 2 ? "Pendente" : (produto.status == 1 ? "Feito" : "Desativado")]),
+                    construtor.criar("td", {}, [formatarDataHora(produto.ultimo_exibir)]),
+                    construtor.criar("td", {}, [produto.status_produto == 1 ? "Ativo" : "Inativo"]),
+                    construtor.criar("td", {}, [
+                        construtor.criar("button", {}, ["Excluir"])
+                    ])
+                ]);
+                // Adiciona a linha à tabela
+                $listaProdutosFilial.appendChild(linhaProduto);
+            });
         })
         .catch(error => {
             console.error('Erro na requisição:', error);
@@ -183,6 +226,7 @@ function vincularProdutoFilial(id_produto) {
         }
         )
         .then(data => {
+            alert(data);
             pesquisarProdutoFilial();
         }
         )
@@ -191,3 +235,18 @@ function vincularProdutoFilial(id_produto) {
         });
 }
 
+function formatarDataHora(dataStr) {
+    if (!dataStr) return "N/A";
+
+    const data = new Date(dataStr.replace(" ", "T"));
+
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const ano = String(data.getFullYear()).slice(-2);
+
+    const hora = String(data.getHours()).padStart(2, "0");
+    const min = String(data.getMinutes()).padStart(2, "0");
+    //   const seg   = String(data.getSeconds()).padStart(2, "0");
+
+    return `${dia}/${mes}/${ano} - ${hora}:${min}`;
+}

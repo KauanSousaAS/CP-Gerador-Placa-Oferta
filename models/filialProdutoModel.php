@@ -114,9 +114,9 @@ class FilialProdutoModel
         }
 
         if ($stmt->execute()) {
-            return ["success" => true, "message" => "Produto vinculado à filial com sucesso."];
+            return "Produto vinculado à filial com sucesso.";
         } else {
-            return ["success" => false, "message" => "Erro ao vincular produto à filial: " . $stmt->error];
+            throw new Exception("Erro ao vincular produto à filial: " + $stmt->error);
         }
     }
 }

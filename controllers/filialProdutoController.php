@@ -8,21 +8,29 @@ class filialProdutoController
 
         require_once(__DIR__ . '/../models/filialProdutoModel.php');
         require_once(__DIR__ . '/../models/produtoModel.php');
+        require_once(__DIR__ . '/../models/itemModel.php');
 
         $filialProdutoModel = new filialProdutoModel();
-
         $produtoModel = new produtoModel();
+        $itemModel = new itemModel();
 
         $filialProdutos = $filialProdutoModel->listar($dados['id_filial']);
 
         $resultado = [];
 
         foreach ($filialProdutos as &$produto) {
-            // $descricao = $produtoModel->buscarPorId($produto['fk_produto']);
-            // $produto = array_merge($produto, $descricao);
+            $informacoes = $produtoModel->buscar($produto['fk_produto']);
+            $codigos = $itemModel->buscarPorId($produto['fk_produto']);
+
+            $produto['descricao'] = $informacoes[0]['descricao'] ?? null;
+            $produto['manual'] = $informacoes[0]['manual'] ?? null;
+            $produto['status_produto'] = $informacoes[0]['status'] ?? null;
+            $produto['codigos'] = $codigos ?? null;
+
+            $resultado[] = $produto;
         }
 
-        echo json_encode($filialProdutos);
+        echo json_encode($resultado);
     }
 
     public function pesquisar()
