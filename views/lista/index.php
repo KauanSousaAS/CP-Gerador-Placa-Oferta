@@ -20,16 +20,19 @@ $controller->validarSessao();
     <a href="../"><button>Voltar</button></a>
     <a href="../cadastros/produto/cadastrar/"><button>Cadastrar Novo Produto</button></a>
 
-    <br>
+    <br><br>
 
     <select name="selecao" id="seletorFilial" onchange="carregarProdutoFilial(this.value);">
         <option selected disabled> -- SELECIONE A FILIAL -- </option>
     </select>
     
-    <br>
+    <br><br>
     
     <input type="text" name="pesquisarProduto" id="pesquisarProduto" placeholder="Pesquisar..." onkeyup="pesquisarProdutoFilial(this.value);">
     <div id="resultadoPesquisa" class="resultadoPesquisa"></div>
+    <button type="button" onclick="carregarProdutoFilial(document.getElementById('seletorFilial').value)">Atualizar</button>
+
+    <br><br>
 
     <table>
         <thead>
@@ -45,8 +48,12 @@ $controller->validarSessao();
                 <th>Ações</th>
             </tr>
         </thead>
+        <br>
         <tbody id="listaProdutosFilial"></tbody>
     </table>
+    
+    <br><br>
+
     <select name="selecao" id="selecao">
         <option selected> -- sem seleção -- </option>
         <option value="1">Todos</option>

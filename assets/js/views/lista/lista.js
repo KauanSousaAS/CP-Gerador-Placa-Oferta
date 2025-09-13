@@ -148,8 +148,6 @@ function carregarProdutoFilial(id_filial) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
-
             $listaProdutosFilial = document.getElementById("listaProdutosFilial");
 
             $listaProdutosFilial.innerHTML = "";
@@ -186,12 +184,18 @@ function carregarProdutoFilial(id_filial) {
                     construtor.criar("td", {}, [formatarDataHora(produto.ultimo_exibir)]),
                     construtor.criar("td", {}, [produto.status_produto == 1 ? "Ativo" : "Inativo"]),
                     construtor.criar("td", {}, [
-                        construtor.criar("button", {}, ["Excluir"])
+                        construtor.criar("button", {
+                            type: "button",
+                            onclick: () => excluirProdutoFilial(produto.fk_produto, document.getElementById('seletorFilial').value)
+                        }, ["Excluir"])
                     ])
                 ]);
                 // Adiciona a linha à tabela
                 $listaProdutosFilial.appendChild(linhaProduto);
+
             });
+            document.getElementById("resultadoPesquisa").style.display = "none";
+            document.getElementById("pesquisarProduto").value = "";
         })
         .catch(error => {
             console.error('Erro na requisição:', error);
@@ -226,8 +230,7 @@ function vincularProdutoFilial(id_produto) {
         }
         )
         .then(data => {
-            alert(data);
-            pesquisarProdutoFilial();
+            carregarProdutoFilial(document.getElementById('seletorFilial').value);
         }
         )
         .catch(error => {
@@ -235,6 +238,46 @@ function vincularProdutoFilial(id_produto) {
         });
 }
 
+function excluirProdutoFilial($produto, $filial) {
+    console.log("Excluir: " + $produto + " da filial: " + $filial);
+
+    fetch('/index.php/filialProduto/excluir', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id_filial: $filial,
+            id_produto: $produto
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                // Se status for 400, 404, 500 etc.
+                return response.json().then(err => {
+                    // Exibi o erro no console, caso houver.
+                    if (err.erro != null) {
+                        alert(err.erro);
+                    } else {
+                        throw new Error("Erro desconhecido");
+                    }
+                });
+            }
+            return response.text();
+        })
+        .then(data => {
+            carregarProdutoFilial(document.getElementById('seletorFilial').value);
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+        });
+}
+
+// =================================================
+//                   Utilitários
+// =================================================
+
+// Formata a data e hora no formato dd/mm/aa - hh:mm
 function formatarDataHora(dataStr) {
     if (!dataStr) return "N/A";
 

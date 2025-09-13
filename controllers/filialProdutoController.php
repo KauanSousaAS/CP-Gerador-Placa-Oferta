@@ -59,4 +59,17 @@ class filialProdutoController
 
         echo json_encode($resultado);
     }
+
+    public function excluir()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
+
+        require_once(__DIR__ . '/../models/filialProdutoModel.php');
+
+        $filialProdutoModel = new filialProdutoModel();
+
+        $resultado = $filialProdutoModel->excluir($dados['id_produto'], $dados['id_filial']);
+
+        echo json_encode($resultado);
+    }   
 }

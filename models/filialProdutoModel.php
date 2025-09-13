@@ -113,10 +113,29 @@ class FilialProdutoModel
             throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
         }
 
-        if ($stmt->execute()) {
-            return "Produto vinculado à filial com sucesso.";
-        } else {
+        if (!$stmt->execute()) {
             throw new Exception("Erro ao vincular produto à filial: " + $stmt->error);
+        }
+    }
+
+    public function excluir($id_produto, $id_filial)
+    {
+        $sql = "DELETE FROM tb_filial_produto WHERE fk_produto = ? AND fk_filial = ?;";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("ii", $id_produto, $id_filial);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
+        }
+
+        if (!$stmt->execute()) {
+            throw new Exception("Erro ao excluir produto da filial: " + $stmt->error);
         }
     }
 }
