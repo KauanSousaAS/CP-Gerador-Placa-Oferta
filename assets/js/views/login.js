@@ -1,23 +1,15 @@
 // Encaminhar as informações de login para o loginController
 function logar() {
-
-    // Captura as informações de login
-    const login = document.getElementById('login').value;
-    const senha = document.getElementById('senha').value;
-
-    // Junta as informações em um array
-    const dadosLogin = {
-        login: login,
-        senha: senha
-    };
-
     // Gera a requisição para encaminhamento das informações para o loginController.php
-    fetch('/index.php/usuario/logar', {
+    fetch('/index.php/usuario/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dadosLogin)
+        body: JSON.stringify({
+            login: document.getElementById('login').value,
+            senha: document.getElementById('senha').value
+        })
     })
         .then(response => {
             if (!response.ok) {
@@ -35,6 +27,7 @@ function logar() {
             return response.json();
         })
         .then(data => {
+            // Redireciona o usuário para a página inicial, caso o login seja bem sucedido.
             if (data.redirect) {
                 window.location.href = data.redirect;
             } else if (data.erroLogin || data.erro) {

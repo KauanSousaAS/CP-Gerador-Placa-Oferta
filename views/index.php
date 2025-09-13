@@ -2,8 +2,8 @@
 
 require_once('../controllers/usuarioController.php');
 
-$controller = new usuarioController();
-$controller->validarSessao();
+$usuarioController = new usuarioController();
+$usuarioController->validarSessao();
 ?>
 
 <!DOCTYPE html>

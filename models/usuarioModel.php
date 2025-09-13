@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . '/../config/conexao.php');
+
 class UsuarioModel
 {
     public $idUsuario;
@@ -8,6 +10,7 @@ class UsuarioModel
     public $senha;
     public $token;
     public $status;
+    private $conexao;
 
     public function __construct($idUsuario = null, $nome = null, $login = null, $senha = null, $token = null, $status = null)
     {
@@ -17,12 +20,12 @@ class UsuarioModel
         $this->senha = $senha;
         $this->token = $token;
         $this->status = $status;
+        $this->conexao = getConexao();
     }
 
     public function cadastrar()
     {
-        $conn = getConexao();
-        $stmt = $conn->prepare("INSERT INTO tb_usuario(nome, login, senha, token, status) VALUES (?,?,?,?,?)");
+        $stmt = $this->conexao->prepare("INSERT INTO tb_usuario(nome, login, senha, token, status) VALUES (?,?,?,?,?)");
         $stmt->bind_param(
             "ssssi",
             $this->nome,
@@ -36,10 +39,7 @@ class UsuarioModel
 
     public function login()
     {
-        require_once(__DIR__ . '/../config/conexao.php');
-
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT id_usuario, senha FROM tb_usuario WHERE login = ?");
+        $stmt = $this->conexao->prepare("SELECT id_usuario, senha FROM tb_usuario WHERE login = ?");
         $stmt->bind_param(
             "s",
             $this->login
@@ -56,8 +56,7 @@ class UsuarioModel
                 $id = $row['id_usuario'];
                 $token = bin2hex(random_bytes(16));
 
-                $conn = getConexao();
-                $stmt = $conn->prepare("UPDATE tb_usuario SET token = ? WHERE id_usuario = ?");
+                $stmt = $this->conexao->prepare("UPDATE tb_usuario SET token = ? WHERE id_usuario = ?");
                 $stmt->bind_param(
                     "si",
                     $token,
@@ -88,11 +87,8 @@ class UsuarioModel
 
     public function validarSessao()
     {
-        require_once(__DIR__ . '/../config/conexao.php');
-
         // Realiza a busca do usuário da sessão e recebe o id do usuário caso encontrado.
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT id_usuario FROM tb_usuario WHERE id_usuario = ? AND token = ?");
+        $stmt = $this->conexao->prepare("SELECT id_usuario FROM tb_usuario WHERE id_usuario = ? AND token = ?");
         $stmt->bind_param(
             "is",
             $this->idUsuario,
@@ -103,7 +99,7 @@ class UsuarioModel
 
         // Retorna nulo caso o usuário não tenha sido encontrado
         if (!$usuario) {
-            return null;
+            return 0;
         }
 
         // Retorna 1 caso o usuário tenha sido reconhecido.

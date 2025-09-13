@@ -227,12 +227,10 @@ function vincularProdutoFilial(id_produto) {
                 );
             }
             return response.text();
-        }
-        )
+        })
         .then(data => {
             carregarProdutoFilial(document.getElementById('seletorFilial').value);
-        }
-        )
+        })
         .catch(error => {
             console.error('Erro na requisição:', error);
         });

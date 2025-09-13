@@ -3,7 +3,7 @@
 class usuarioController
 {
     // Função usada para validar se o usuário está logado em uma conta.
-    public function iniciarSessao()
+    public function login()
     {
 
         // Recebe o corpo da requisição HTTP, converte para array e recebe os dados de login
@@ -21,13 +21,13 @@ class usuarioController
         // Recebe o model de Usuário.
         require_once(__DIR__ . '/../models/usuarioModel.php');
 
-        $controller = new UsuarioModel();
+        $usuarioModel = new UsuarioModel();
 
-        $controller->login = $login;
-        $controller->senha = $senha;
+        $usuarioModel->login = $login;
+        $usuarioModel->senha = $senha;
         
         // Inicia a função de login do model de Usuário.
-        $resultado = $controller->login();
+        $resultado = $usuarioModel->login();
 
         switch ($resultado) {
             case 2:
@@ -58,20 +58,19 @@ class usuarioController
         
         // Verifica se há um usuário e um token registrados na sessão.
         if (!isset($_SESSION['idUsuario']) || !isset($_SESSION['token'])) {
-            // Retorna nulo caso não exista dados nas sessões de id e token do usuário.
-            return null;
+            header("Location: /views/login.php");
         }
         
         // Recebe o model de Usuário.
         require_once(__DIR__ . '/../models/usuarioModel.php');
-
-        $controller = new UsuarioModel();
-
-        $controller->idUsuario = $_SESSION['idUsuario'];
-        $controller->token = $_SESSION['token'];
-
+        
+        $usuarioModel = new UsuarioModel();
+        
+        $usuarioModel->idUsuario = $_SESSION['idUsuario'];
+        $usuarioModel->token = $_SESSION['token'];
+        
         // Inicia a função de verificação de login/sessão do Usuário.
-        if (!$controller->validarSessao()) {
+        if (!$usuarioModel->validarSessao()) {
             header("Location: /views/login.php");
             exit();
         }

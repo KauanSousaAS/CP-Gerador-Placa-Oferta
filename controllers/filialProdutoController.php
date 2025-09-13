@@ -44,7 +44,6 @@ class filialProdutoController
         $filialProdutos = $filialProdutoModel->pesquisarProdutoFilial($dados['id_filial'], $dados['pesquisa']);
 
         echo json_encode($filialProdutos);
-        // echo json_encode($dados);
     }
 
     public function vincular()
