@@ -14,7 +14,7 @@ class filialProdutoController
         $produtoModel = new produtoModel();
         $itemModel = new itemModel();
 
-        $filialProdutos = $filialProdutoModel->listar($dados['id_filial']);
+        $filialProdutos = $filialProdutoModel->buscar($dados['id_filial']);
 
         $filialProdutos[0]['situacao'] = $filialProdutos[0]['status'];
 

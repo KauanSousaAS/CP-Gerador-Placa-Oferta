@@ -163,6 +163,8 @@ function carregarProdutoFilial(id_filial) {
                     construtor.criar("td", {}, [
                         construtor.criar("input", {
                             type: "checkbox",
+                            class: "produtoSelecionado",
+                            name: "produtoSelecionado",
                             value: produto.fk_produto
                         })
                     ]),
@@ -239,8 +241,6 @@ function vincularProdutoFilial(id_produto) {
 }
 
 function excluirProdutoFilial($produto, $filial) {
-    console.log("Excluir: " + $produto + " da filial: " + $filial);
-
     fetch('/index.php/filialProduto/excluir', {
         method: 'POST',
         headers: {
@@ -292,4 +292,65 @@ function formatarDataHora(dataStr) {
     //   const seg   = String(data.getSeconds()).padStart(2, "0");
 
     return `${dia}/${mes}/${ano} - ${hora}:${min}`;
+}
+
+function acoesExecutar(acao) {
+    const checkboxes = document.querySelectorAll('.produtoSelecionado:checked');
+
+    const ids = Array.from(checkboxes).map(cb => cb.value);
+
+    console.log(ids);
+
+    const novaJanela = window.open('exibir.php', '_blank');
+
+    // Aguarda a nova aba carregar completamente
+    novaJanela.onload = function () {
+        novaJanela.postMessage({
+            ids: ids,
+            filial: document.getElementById('seletorFilial').value
+        }, '*');
+    };
+
+    // switch (acao) {
+    //     case "exibir":
+    //         const novaJanela = window.open('../pages/exibir.html', '_blank');
+
+    //         // Aguarda a nova aba carregar completamente
+    //         novaJanela.onload = function () {
+    //             novaJanela.postMessage({
+    //                 ids: ids
+    //             }, '*');
+    //         };
+    //         break;
+    //     case "concluir":
+    //         const formDataConcluir = new FormData();
+    //         formDataConcluir.append('funcao', 'concluirAssociacaoProdutoFilial');
+    //         formDataConcluir.append('ids', JSON.stringify(ids));
+
+    //         let xhrConcluir = new XMLHttpRequest();
+    //         xhrConcluir.open("POST", '../../php/funcoes.php', true);
+    //         xhrConcluir.onreadystatechange = function () {
+    //             if (xhrConcluir.readyState == 4 && xhrConcluir.status == 200) {
+    //                 loadData();
+    //                 console.log(xhrConcluir.responseText);
+    //             }
+    //         }
+    //         xhrConcluir.send(formDataConcluir);
+    //         break;
+    //     case "excluir":
+    //         const formDataExcluir = new FormData();
+    //         formDataExcluir.append('funcao', 'desvincularFilialProduto');
+    //         formDataExcluir.append('ids', JSON.stringify(ids));
+
+    //         let xhrExcluir = new XMLHttpRequest();
+    //         xhrExcluir.open("POST", '../../php/funcoes.php', true);
+    //         xhrExcluir.onreadystatechange = function () {
+    //             if (xhrExcluir.readyState == 4 && xhrExcluir.status == 200) {
+    //                 loadData();
+    //                 console.log(xhrExcluir.responseText);
+    //             }
+    //         }
+    //         xhrExcluir.send(formDataExcluir);
+    //         break;
+    // }
 }

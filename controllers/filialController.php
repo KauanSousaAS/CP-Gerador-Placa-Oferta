@@ -6,7 +6,7 @@ class filialController{
 
         $filialModel = new filialModel();
 
-        $filiais = $filialModel->listar();
+        $filiais = $filialModel->buscar(null);
 
         echo json_encode($filiais);
     }

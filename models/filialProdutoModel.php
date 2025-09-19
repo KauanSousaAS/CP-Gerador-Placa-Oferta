@@ -21,7 +21,7 @@ class FilialProdutoModel
         $this->conexao = getConexao();
     }
 
-    public function listar($id_filial)
+    public function buscar($id_filial)
     {
 
         if ($id_filial === null) {

@@ -8,6 +8,7 @@ class PrecoModel {
     public $quantidade;
     public $uf;
     public $fkProduto;
+    private $conexao;
 
     public function __construct($venda = null, $preco = null, $quantidade = null, $uf = null, $fkProduto = null) {
         $this->venda = $venda;
@@ -15,12 +16,11 @@ class PrecoModel {
         $this->quantidade = $quantidade;
         $this->uf = $uf;
         $this->fkProduto = $fkProduto;
+        $this->conexao = getConexao();
     }
     
-
     public function cadastrar() {
-        $conn = getConexao();
-        $stmt = $conn->prepare("INSERT INTO tb_preco (venda, preco, quantidade, uf, fk_produto) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->conexao->prepare("INSERT INTO tb_preco (venda, preco, quantidade, uf, fk_produto) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param(
             "sdisi",
             $this->venda,
@@ -32,16 +32,36 @@ class PrecoModel {
         return $stmt->execute();
     }
 
-    public static function listarPrecos($produtos) {
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT * FROM tb_preco WHERE id_preco = ?");
-        $stmt->execute([]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    public function buscar($id, $uf) {
+        $sql = "SELECT * FROM tb_preco WHERE fk_produto = ? AND uf = ?";
+
+        // if ($uf) {
+        //     $sql .= " AND uf = ?";
+        // }
+
+        $stmt = $this->conexao->prepare($sql);
+        
+        $stmt->bind_param("is", $id, $uf);
+
+        // if ($uf) {
+        //     $stmt->bind_param("is", $id, $uf);
+        // } else {
+        //     $stmt->bind_param("i", $id);
+        // }
+
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+
+        $precos = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $precos[] = $row;
+        }
+        
+        return $precos;
     }
 
-    public static function deletar($id) {
-        $conn = getConexao();
-        $stmt = $conn->prepare("DELETE FROM tb_preco WHERE id_preco = ?");
-        return $stmt->execute([$id]);
+    public function excluir($id) {
+        // Excluir preços por ID do produto
     }
 }

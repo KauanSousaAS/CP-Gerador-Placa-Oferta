@@ -18,21 +18,33 @@ class filialModel {
         $this->conexao = getConexao();
     }
 
-    public function listar() {
-        $stmt = $this->conexao->prepare("SELECT id_filial, filial, uf, status FROM tb_filial");
+    public function buscar($id) {
+
+        $sql = "SELECT * FROM tb_filial";
+
+        if ($id !== null) {
+            $sql .= " WHERE id_filial = ?";
+        }
+
+        $stmt = $this->conexao->prepare($sql);
 
         if (!$stmt) {
             throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
         }
 
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-
-        $filiais = [];
-        while ($row = $resultado->fetch_assoc()) {
-            $filiais[] = $row;
+        if ($id !== null) {
+            $stmt->bind_param("i", $id);
         }
 
-        return $filiais;
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+
+        $produtos = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $produtos[] = $row;
+        }
+
+        return $produtos;
     }
 }

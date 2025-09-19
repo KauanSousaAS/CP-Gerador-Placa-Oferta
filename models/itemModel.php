@@ -58,10 +58,8 @@ class ItemModel
         return $codigos;
     }
 
-    public static function excluir($id)
+    public function excluir($id)
     {
-        $conn = getConexao();
-        $stmt = $conn->prepare("DELETE FROM tb_item WHERE id_item = ?");
-        return $stmt->execute([$id]);
+        // Excluir códigos pelo ID do produto
     }
 }
