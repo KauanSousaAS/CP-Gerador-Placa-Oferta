@@ -6,18 +6,19 @@ class ItemModel
 {
     public $codigo;
     public $fkProduto;
+    private $conexao;
 
     public function __construct($codigo = null, $fkProduto = null)
     {
         $this->codigo = $codigo;
         $this->fkProduto = $fkProduto;
+        $this->conexao = getConexao();
     }
 
     // Cadastrar um novo código a um produto
     public function cadastrar()
     {
-        $conn = getConexao();
-        $stmt = $conn->prepare("INSERT INTO tb_item (codigo, fk_produto) VALUES (?, ?)");
+        $stmt = $this->conexao->prepare("INSERT INTO tb_item (codigo, fk_produto) VALUES (?, ?)");
         $stmt->bind_param(
             "ii",
             $this->codigo,
@@ -27,25 +28,33 @@ class ItemModel
     }
 
     // Busca os códigos do produto pelo ID
-    public static function buscarPorId($id)
+    public function buscar($id)
     {
-        $conn = getConexao();
-        $stmt = $conn->prepare("SELECT codigo FROM tb_item WHERE fk_produto = ?");
+        $sql = "SELECT * FROM tb_item";
 
-        $stmt->bind_param("i", $id);
+        if ($id !== null) {
+            $sql .= " WHERE fk_produto = ?";
+        }
+
+        $stmt = $this->conexao->prepare($sql);
 
         if (!$stmt) {
-            throw new Exception("Erro ao preparar consulta: " . $conn->error);
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        if ($id !== null) {
+            $stmt->bind_param("i", $id);
         }
 
         $stmt->execute();
+
         $resultado = $stmt->get_result();
 
         $codigos = [];
         while ($row = $resultado->fetch_assoc()) {
-            $codigos[] = $row['codigo'];
-        }       
-        
+            $codigos[] = $row;
+        }
+
         return $codigos;
     }
 

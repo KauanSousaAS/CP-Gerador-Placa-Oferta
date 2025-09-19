@@ -148,6 +148,8 @@ function carregarProdutoFilial(id_filial) {
             return response.json();
         })
         .then(data => {
+            console.log(data);
+
             $listaProdutosFilial = document.getElementById("listaProdutosFilial");
 
             $listaProdutosFilial.innerHTML = "";
@@ -180,9 +182,9 @@ function carregarProdutoFilial(id_filial) {
                     ]),
                     construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
                     construtor.criar("td", {}, [produto.estoque_filial]),
-                    construtor.criar("td", {}, [produto.status == 2 ? "Pendente" : (produto.status == 1 ? "Feito" : "Desativado")]),
+                    construtor.criar("td", {}, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : "Desativado")]),
                     construtor.criar("td", {}, [formatarDataHora(produto.ultimo_exibir)]),
-                    construtor.criar("td", {}, [produto.status_produto == 1 ? "Ativo" : "Inativo"]),
+                    construtor.criar("td", {}, [produto.status == 1 ? "Ativo" : "Inativo"]),
                     construtor.criar("td", {}, [
                         construtor.criar("button", {
                             type: "button",

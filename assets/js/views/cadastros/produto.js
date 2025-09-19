@@ -22,6 +22,8 @@ function listarProdutos() {
         })
         .then(data => {
 
+            console.log(data);
+
             // Chama o construtor de elementos HTML
             const construtor = new Construtor();
 

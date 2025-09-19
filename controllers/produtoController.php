@@ -127,10 +127,13 @@ class produtoController
         $itemModel = new itemModel();
         // $precoModel = new precoModel();
 
-        $produtos = $produtoModel->listarProdutos();
+        $produtos = $produtoModel->buscar(null);
 
         foreach ($produtos as &$produto) {
-            $produto['codigos'] = $itemModel->buscarPorId(intval($produto['id_produto']));
+
+            $i = $itemModel->buscar(intval($produto['id_produto']));
+
+            $produto['codigos'] = array_column($i, 'codigo');
         }
 
         echo json_encode($produtos);

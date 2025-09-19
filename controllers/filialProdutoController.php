@@ -16,17 +16,26 @@ class filialProdutoController
 
         $filialProdutos = $filialProdutoModel->listar($dados['id_filial']);
 
+        $filialProdutos[0]['situacao'] = $filialProdutos[0]['status'];
+
+        unset($filialProdutos[0]['status']);
+
         $resultado = [];
 
         foreach ($filialProdutos as &$produto) {
-            $informacoes = $produtoModel->buscar($produto['fk_produto']);
-            $codigos = $itemModel->buscarPorId($produto['fk_produto']);
 
-            $produto['descricao'] = $informacoes[0]['descricao'] ?? null;
-            $produto['manual'] = $informacoes[0]['manual'] ?? null;
-            $produto['status_produto'] = $informacoes[0]['status'] ?? null;
-            $produto['codigos'] = $codigos ?? null;
+            $p = $produtoModel->buscar($produto['fk_produto']);
 
+            $p = $p[0];
+            
+            $c = $itemModel->buscar($produto['fk_produto']);
+            
+            $p['codigos'] = array_column($c, 'codigo');
+
+            unset($p['id_produto']);
+
+            $produto = array_merge($produto, $p);
+            
             $resultado[] = $produto;
         }
 
@@ -70,5 +79,5 @@ class filialProdutoController
         $resultado = $filialProdutoModel->excluir($dados['id_produto'], $dados['id_filial']);
 
         echo json_encode($resultado);
-    }   
+    }
 }

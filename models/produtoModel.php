@@ -21,26 +21,7 @@ class ProdutoModel
         $this->status = $status;
         $this->conexao = getConexao();
     }
-
-    public function listarProdutos()
-    {
-        $stmt = $this->conexao->prepare("SELECT id_produto, descricao, status FROM tb_produto");
-
-        if (!$stmt) {
-            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
-        }
-
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-
-        $produtos = [];
-        while ($row = $resultado->fetch_assoc()) {
-            $produtos[] = $row;
-        }
-
-        return $produtos;
-    }
-
+    
     public function cadastrar()
     {
         $stmt = $this->conexao->prepare("INSERT INTO tb_produto(descricao, manual, volume, status) VALUES (?,?,?,?)");
@@ -58,28 +39,26 @@ class ProdutoModel
 
     public function buscar($id)
     {
-        $sql = "SELECT id_produto, descricao, manual, volume, status FROM tb_produto";
+        $sql = "SELECT * FROM tb_produto";
 
-        if(!($id === null)) {
+        if ($id !== null) {
             $sql .= " WHERE id_produto = ?";
         }
 
         $stmt = $this->conexao->prepare($sql);
 
-        $stmt->bind_param("i", $id);
-        
-        if(!($id === null)) {
-            $sql .= " WHERE id_produto = ?";
-        }
-
         if (!$stmt) {
             throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        if ($id !== null) {
+            $stmt->bind_param("i", $id);
         }
 
         $stmt->execute();
 
         $resultado = $stmt->get_result();
-        
+
         $produtos = [];
         while ($row = $resultado->fetch_assoc()) {
             $produtos[] = $row;
