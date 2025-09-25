@@ -24,7 +24,7 @@ body {
 }
 
 .panfleto {
-    background-image: url('../images/background_oferta.png');
+    background-image: url('/assets/images/fundo.png');
     background-size: 297mm 210mm;
     background-position: center;
     background-repeat: no-repeat;
@@ -38,7 +38,7 @@ body {
 }
 
 /* -------------------------------------------------------------------------------------------- unitario */
-.quadroPanfleto {
+.tela {
     padding: 0;
     border: 0;
     margin: 75mm 56mm 29mm 56mm;
@@ -49,7 +49,7 @@ body {
     justify-content: center;
 }
 
-.descricaoPanfleto {
+.descricao {
     padding: 0;
     border: 0;
     margin-top: 33mm;

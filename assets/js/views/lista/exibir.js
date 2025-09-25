@@ -2,10 +2,7 @@ window.addEventListener('message', function (event) {
 
     const data = event.data;
 
-    const tabela = document.getElementById("dados");
-
-    // APAGAR DEPOIS
-    tabela.innerHTML = "Produto(s) selecionado(s).";
+    const lista = document.getElementById("dados");
 
     fetch('/index.php/produto/exibir', {
         method: 'POST',
@@ -29,83 +26,59 @@ window.addEventListener('message', function (event) {
             return response.json();
         })
         .then(data => {
-            // Chama o construtor de elementos HTML
-            // const construtor = new Construtor();
-
-            console.log("Sucesso na requisição:");
-
             console.log(data);
+
+            data.forEach(produto => {
+
+                // Cria a placa
+                const placa = gerarPlaca(produto);
+
+                lista.appendChild(placa);
+            });
         })
         .catch(error => {
             console.error('Erro na requisição:', error);
         });
 
-    // // Gera a requisição para ao servidor para captar os dados dos panfletos
-    // let xhr = new XMLHttpRequest();
-    // xhr.open("POST", "../../php/funcoes.php", true);
-    // xhr.onreadystatechange = function () {
 
-    //     if (xhr.readyState == 4 && xhr.status == 200) {
-    //         // Recebe os dados dos produtos para gerar os panfletos
-    //         let dadosProduto = JSON.parse(xhr.responseText);
 
-    //         // Cria uma variável para manipular a div 'dados' no arquivo HTML
-    //         let lista = document.getElementById("dados");
-
-    //         for (let i = 0; i < dadosProduto.length; i++) {
-
-    //             let divPanfleto = criarDiv('panfleto', null);
-
-    //             divPanfleto.appendChild(adicionarDescricao(dadosProduto[i].cod_produto, dadosProduto[i].desc_produto));
-
-    //             if (dadosProduto[i].tipo_venda == 1) {
-
-    //                 divPanfleto.appendChild(adicionarValorUnitario(dadosProduto[i].valor));
-
-    //             }
-
-    //             if (dadosProduto[i].tipo_venda == 2) {
-
-    //                 let dados = [];
-    //                 let codigo = dadosProduto[i].cod_produto;
-    //                 let trava = codigo;
-    //                 while (codigo == trava) {
-
-    //                     if (dadosProduto[i]) {
-
-    //                         codigo = dadosProduto[i].cod_produto;
-
-    //                         if (codigo == trava) {
-
-    //                             dados.push(dadosProduto[i]);
-    //                             i++;
-
-    //                         } else {
-
-    //                             trava = null;
-    //                             i--;
-
-    //                         }
-    //                     } else {
-    //                         trava = null;
-    //                     }
-
-    //                 }
-    //                 divPanfleto.appendChild(adicionarValorQuantidade(dados));
-    //             }
-    //             lista.appendChild(divPanfleto);
-    //         }
-    //     }
-    // };
-    // xhr.send(formData);
 
     // Gerando o panfleto
-    function adicionarDescricao(codProduto, descProduto) {
+    function gerarPlaca(produto) {
+        // Chama o construtor de elementos HTML
+        const construtor = new Construtor();
 
-        let divDescricaoPanfleto = criarDiv('descricaoPanfleto', "Cod: " + codProduto + " - " + descProduto);
+        let placa = construtor.criar("div", {
+            class: "panfleto"
+        }, [
+            // Adiciona a descrição do produto
+            construtor.criar("div", {
+                class: "descricao"
+            }, [
+                produto.codigos.join(";") + " - " + produto.descricao,
+                adicionarPreco(produto.precos)
+            ]),
+        ]);
 
-        return divDescricaoPanfleto;
+        return placa;
     }
+
+    function adicionarPreco(precos) {
+        // Chama o construtor de elementos HTML
+        const construtor = new Construtor();
+
+        // Adiciona o campo para os preços
+        let tela = construtor.criar("div", {
+            class: "tela"
+        }[
+            (precos.length > 0) ?
+            console.log("POSSUI PREÇO") :
+            console.log("NÃO POSSUI PREÇO")
+        ]);
+
+        return tela;
+    }
+
     function adicionarValorUnitario(valor) {
 
         // desc

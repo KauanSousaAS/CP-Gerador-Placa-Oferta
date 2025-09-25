@@ -10,5 +10,6 @@
     <div id="dados"> <!-- corpo para os panfletos --> </div>
 
     <script src="/assets/js/views/lista/exibir.js"></script>
+    <script src="/assets/js/views/util/construtor.js"></script>
 </body>
 </html>

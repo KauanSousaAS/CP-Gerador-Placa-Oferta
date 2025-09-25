@@ -299,8 +299,6 @@ function acoesExecutar(acao) {
 
     const ids = Array.from(checkboxes).map(cb => cb.value);
 
-    console.log(ids);
-
     const novaJanela = window.open('exibir.php', '_blank');
 
     // Aguarda a nova aba carregar completamente

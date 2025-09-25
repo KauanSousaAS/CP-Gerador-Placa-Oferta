@@ -70,7 +70,7 @@ $controller->validarSessao();
 
 <link rel="stylesheet" href="/assets/css/views/lista/lista.css">
 <script src="/assets/js/views/lista/lista.js"></script>
-<script src="/assets/js/views/util/contrutor.js"></script>
+<script src="/assets/js/views/util/construtor.js"></script>
 
 <script>
     window.onload = function() {

@@ -45,7 +45,7 @@ $controller->validarSessao();
 </body>
 
 <link rel="stylesheet" href="/assets/css/views/cadastros/filial.css">
-<script src="/assets/js/views/util/contrutor.js"></script>
+<script src="/assets/js/views/util/construtor.js"></script>
 <script src="/assets/js/views/cadastros/filial.js"></script>
 
 <script>
