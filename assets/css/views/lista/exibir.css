@@ -59,17 +59,21 @@ body {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+@font-face {
+    font-family: 'Klavika CH';
+    src: url('/assets/fonts/KlavikaCH-BoldCondIt.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
 .valorUnitario {
+    font-family: 'Klavika CH', sans-serif;
+    color: #EE3738;
     padding: 0;
     border: 0;
     position: absolute;
     display: flex;
     align-items: flex-end;
-    src: url('../fonts/KlavikaCH-BoldCondIt') format('otf');
-    font-family: 'Klavika CH';
-    font-weight: bold;
-    font-style: italic;
-    color: #EE3738;
     margin-left: -40px;
 }
 

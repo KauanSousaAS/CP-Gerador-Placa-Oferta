@@ -26,8 +26,6 @@ window.addEventListener('message', function (event) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
-
             data.forEach(produto => {
 
                 // Cria a placa
@@ -56,82 +54,35 @@ window.addEventListener('message', function (event) {
                 class: "descricao"
             }, [
                 produto.codigos.join(";") + " - " + produto.descricao,
-                adicionarPreco(produto.precos)
             ]),
+            (produto.precos.length > 0) ?
+                ((produto.venda === "UN") ?
+                    precoProdutoUnitario(produto.precos[0].preco)
+                    :
+                    ((produto.venda === "QN") ?
+                        precoProdutoQuantidade(produto.precos)
+                        :
+                        console.log("ERRO")))
+                :
+                console.log("NÃO POSSUI PREÇO")
         ]);
 
         return placa;
     }
 
-    function adicionarPreco(precos) {
+    function precoProdutoUnitario(preco) {
         // Chama o construtor de elementos HTML
         const construtor = new Construtor();
 
-        // Adiciona o campo para os preços
-        let tela = construtor.criar("div", {
-            class: "tela"
-        }[
-            (precos.length > 0) ?
-            console.log("POSSUI PREÇO") :
-            console.log("NÃO POSSUI PREÇO")
-        ]);
+        const valorOferta = parseFloat(preco).toFixed(2).split('.');
 
-        return tela;
-    }
-
-    function adicionarValorUnitario(valor) {
-
-        // desc
-        let divQuadroPanfleto = criarDiv('quadroPanfleto', null);
-
-        // desc
-        let divValorUnitario = criarDiv('valorUnitario', null);
-
-        // desc
-        let divTextoRs = criarDiv('textoRs', "R$");
-
-        // desc
-        divValorUnitario.appendChild(divTextoRs);
-
-        // desc
-        let valorOferta = parseFloat(valor).toFixed(2).split('.');
-
-        // desc
-        let divValorInteiro = criarDiv('valorInt', formatarNumero(valorOferta[0]));
-
-        // desc
-        divValorUnitario.appendChild(divValorInteiro);
-
-        // desc
-        let divCentavoAvista = criarDiv('centAvista', null);
-
-        // desc
-        let divCentavo = criarDiv('centavo', "," + valorOferta[1]);
-
-        // desc
-        divCentavoAvista.appendChild(divCentavo);
-
-        // desc
-        let divAvista = criarDiv('avista', "À vista");
-
-        // desc
-        divCentavoAvista.appendChild(divAvista);
-
-        // desc
-        divValorUnitario.appendChild(divCentavoAvista);
-
-        // desc
-        divQuadroPanfleto.appendChild(divValorUnitario);
-
-        // desc
-        let divParcela = criarDiv('parcela', null);
-
-        // desc
-        let divParcelaGrupo = criarDiv('parcela_grupo', null);
+        // =========================================================================
+        // Observação: as porcentagems serão atributos variáveis manipulados 
+        // =========================================================================
 
 
         // Calcula os valores para 3 parcelas
-        let valorParcela1 = (valor * 1.04);
+        let valorParcela1 = (preco * 1.04);
 
         let valorParcela3x = tirarMediaParcela(valorParcela1 / 3.0);
 
@@ -141,7 +92,7 @@ window.addEventListener('message', function (event) {
 
 
         // Calcula os valores para 6 parcelas
-        let valorParcela2 = ((valor * 1.04) * 1.03);
+        let valorParcela2 = ((preco * 1.04) * 1.03);
 
         let valorParcela6x = tirarMediaParcela(valorParcela2 / 6.0);
 
@@ -150,70 +101,128 @@ window.addEventListener('message', function (event) {
         let valorParcela6xTotal = (formatarNumeroComDecimais(valorParcela6x * 6));
 
 
-        // parcelas linha 1: ou 3x R$ XX,XX
-        let divLinhaParcela1 = criarDiv('parcela_linha', null);
 
-        let divLinhaParcelaOu1 = criarDiv('parcela_ou', "OU");
-        let divLinhaParcelaVezes1 = criarDiv('parcela_vezes', "3X");
-        let divLinhaParcelaRs1 = criarDiv('parcela_rs', " R$");
-        let divLinhaParcelaPreco1 = criarDiv('parcela_preco', valorParcela3xParcela.valorInteiro + "," + valorParcela3xParcela.centavo);
+        // Criar 
+        let tela = construtor.criar("div", {
+            class: "tela"
+        }, [
+            construtor.criar("div", {
+                class: "valorUnitario"
+            }, [
+                construtor.criar("div", {
+                    class: "textoRs"
+                }, [
+                    "R$"
+                ]),
+                construtor.criar("div", {
+                    class: "valorInt"
+                }, [
+                    formatarNumero(valorOferta[0])
+                ]),
+                construtor.criar("div", {
+                    class: "centAvista"
+                }, [
+                    construtor.criar("div", {
+                        class: "centavo"
+                    }, [
+                        "," + valorOferta[1]
+                    ]),
+                    construtor.criar("div", {
+                        class: "avista"
+                    }, [
+                        "À vista"
+                    ])
+                ])
+            ])
+        ]);
 
-        divLinhaParcela1.appendChild(divLinhaParcelaOu1);
-        divLinhaParcela1.appendChild(divLinhaParcelaVezes1);
-        divLinhaParcela1.appendChild(divLinhaParcelaRs1);
-        divLinhaParcela1.appendChild(divLinhaParcelaPreco1);
+        tela.appendChild(
+            construtor.criar("div", {
+                class: "parcela"
+            }, [
+                construtor.criar("div", {
+                    class: "parcela_grupo"
+                }, [
+                    construtor.criar("div", {
+                        class: "parcela_linha"
+                    }, [
+                        construtor.criar("div", {
+                            class: "parcela_ou"
+                        }, [
+                            "OU"
+                        ]),
+                        construtor.criar("div", {
+                            class: "parcela_vezes"
+                        }, [
+                            "3X"
+                        ]),
+                        construtor.criar("div", {
+                            class: "parcela_rs"
+                        }, [
+                            " R$"
+                        ]),
+                        construtor.criar("div", {
+                            class: "parcela_preco"
+                        }, [
+                            valorParcela3xParcela.valorInteiro + "," + valorParcela3xParcela.centavo
+                        ])
+                    ]),
+                    construtor.criar("div", {
+                        class: "parcela_linha"
+                    }, [
+                        construtor.criar("div", {
+                            class: "parcela_total"
+                        }, [
+                            "Total: R$ " + valorParcela3xTotal.valorInteiro + "," + valorParcela3xTotal.centavo
+                        ])
+                    ]),
+                    construtor.criar("div", {
+                        class: "parcela_linha"
+                    }, [
+                        construtor.criar("div", {
+                            class: "parcela_ou"
+                        }, [
+                            "OU"
+                        ]),
+                        construtor.criar("div", {
+                            class: "parcela_vezes"
+                        }, [
+                            "3X"
+                        ]),
+                        construtor.criar("div", {
+                            class: "parcela_rs"
+                        }, [
+                            " R$"
+                        ]),
+                        construtor.criar("div", {
+                            class: "parcela_preco"
+                        }, [
+                            valorParcela6xParcela.valorInteiro + "," + valorParcela6xParcela.centavo
+                        ])
+                    ]),
+                    construtor.criar("div", {
+                        class: "parcela_linha"
+                    }, [
+                        construtor.criar("div", {
+                            class: "parcela_total"
+                        }, [
+                            "Total: R$ " + valorParcela6xTotal.valorInteiro + "," + valorParcela6xTotal.centavo
+                        ])
+                    ])
+                ])
+            ])
+        );
 
-        divParcelaGrupo.appendChild(divLinhaParcela1);
-        divParcela.appendChild(divParcelaGrupo);
-        divQuadroPanfleto.appendChild(divParcela);
-
-
-        // parcelas linha 2: total: R$ XX,XX
-        let divLinhaParcela2 = criarDiv('parcela_linha', null);
-
-        let divLinhaParcelaTotal1 = criarDiv('parcela_total', "Total: R$ " + valorParcela3xTotal.valorInteiro + "," + valorParcela3xTotal.centavo);
-
-        divLinhaParcela2.appendChild(divLinhaParcelaTotal1);
-
-        divParcelaGrupo.appendChild(divLinhaParcela2);
-        divParcela.appendChild(divParcelaGrupo);
-        divQuadroPanfleto.appendChild(divParcela);
-
-
-        // parcelas linha 3: ou 6x R$ XX,XX
-        let divLinhaParcela3 = criarDiv('parcela_linha', null);
-
-        let divLinhaParcelaOu2 = criarDiv('parcela_ou', "OU");
-        let divLinhaParcelaVezes2 = criarDiv('parcela_vezes', "6X");
-        let divLinhaParcelaRs2 = criarDiv('parcela_rs', " R$");
-        let divLinhaParcelaPreco2 = criarDiv('parcela_preco', valorParcela6xParcela.valorInteiro + "," + valorParcela6xParcela.centavo);
-
-        divLinhaParcela3.appendChild(divLinhaParcelaOu2);
-        divLinhaParcela3.appendChild(divLinhaParcelaVezes2);
-        divLinhaParcela3.appendChild(divLinhaParcelaRs2);
-        divLinhaParcela3.appendChild(divLinhaParcelaPreco2);
-
-        divParcelaGrupo.appendChild(divLinhaParcela3);
-        divParcela.appendChild(divParcelaGrupo);
-        divQuadroPanfleto.appendChild(divParcela);
-
-
-        // parcelas linha 4: total: R$ XX,XX
-        let divLinhaParcela4 = criarDiv('parcela_linha', null);
-
-        let divLinhaParcelaTotal2 = document.createElement('div');
-        divLinhaParcelaTotal2.className = 'parcela_total';
-
-        divLinhaParcelaTotal2.innerHTML = "Total: R$ " + valorParcela6xTotal.valorInteiro + "," + valorParcela6xTotal.centavo;
-
-        divLinhaParcela4.appendChild(divLinhaParcelaTotal2);
-
-        divParcelaGrupo.appendChild(divLinhaParcela4);
-        divParcela.appendChild(divParcelaGrupo);
-        divQuadroPanfleto.appendChild(divParcela);
-
-        return divQuadroPanfleto;
+        return tela;
     }
+
+    function precoProdutoQuantidade(precos) {
+        // Chama o construtor de elementos HTML
+        const construtor = new Construtor();
+
+        // return tela;
+    }
+
     function adicionarValorQuantidade(dadosProdutoQuantidade) {
         // valor primeira quantidade
         dadosProdutoQuantidade[0].tipo_produto = converteCodTipo(dadosProdutoQuantidade[0].tipo_produto);
