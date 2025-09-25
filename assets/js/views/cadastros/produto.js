@@ -77,7 +77,7 @@ function cadastrar() {
     // Desativa o botão de Salvar para evitar multiplas inserções.
     document.getElementById('butaoCadastrar').disabled = true;
 
-    // Captura as informações de login e preparando o array 'dadosCadastr' para envio.
+    // Captura as informações do produto e preparando o array para envio.
     const venda = document.getElementById('venda').value;
 
     const dadosCadastro = {

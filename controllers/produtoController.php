@@ -29,14 +29,12 @@ class produtoController
                 $precosRecebidos = $dados['valorUnt'];
 
                 $precos[] = $this->prepararPrecoParaCadastro(
-                    $dados['venda'],
                     $this->converterValorStringDouble($this->validarPreco($precosRecebidos['precoPr'])),
                     1,
                     "PR"
                 );
 
                 $precos[] = $this->prepararPrecoParaCadastro(
-                    $dados['venda'],
                     $this->converterValorStringDouble($this->validarPreco($precosRecebidos['precoMs'])),
                     1,
                     "MS"
@@ -48,14 +46,12 @@ class produtoController
                 foreach ($precosRecebidos as $preco) {
 
                     $precos[] = $this->prepararPrecoParaCadastro(
-                        $dados['venda'],
                         $this->converterValorStringDouble($this->validarPreco($preco['precoPr'])),
                         intval($preco['quantidade']),
                         "PR"
                     );
 
                     $precos[] = $this->prepararPrecoParaCadastro(
-                        $dados['venda'],
                         $this->converterValorStringDouble($this->validarPreco($preco['precoMs'])),
                         intval($preco['quantidade']),
                         "MS"
@@ -72,6 +68,8 @@ class produtoController
 
         $descricao = $dados['descricao'];
 
+        $venda = $dados['venda'];
+
         $volume = $dados['volume'];
 
         require_once(__DIR__ . '/../models/produtoModel.php');
@@ -81,6 +79,7 @@ class produtoController
         $produtoModel->status = $status;
         $produtoModel->manual = $manual;
         $produtoModel->descricao = $descricao;
+        $produtoModel->venda = $venda;
         $produtoModel->volume = $volume;
 
         $produtoModel->cadastrar();
@@ -101,7 +100,6 @@ class produtoController
         foreach ($precos as $preco) {
             $precoModel = new precoModel();
 
-            $precoModel->venda = $preco['venda'];
             $precoModel->preco = $preco['preco'];
             $precoModel->quantidade = $preco['quantidade'];
             $precoModel->uf = $preco['uf'];
@@ -194,10 +192,9 @@ class produtoController
         return $precoValidar;
     }
 
-    private function prepararPrecoParaCadastro($venda, $preco, $quantidade, $uf)
+    private function prepararPrecoParaCadastro($preco, $quantidade, $uf)
     {
         return [
-            'venda' => $venda,
             'preco' => $preco,
             'quantidade' => $quantidade,
             'uf' => $uf

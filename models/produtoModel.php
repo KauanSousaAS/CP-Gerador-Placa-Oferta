@@ -7,15 +7,17 @@ class ProdutoModel
 
     public $idProduto;
     public $descricao;
+    public $venda;
     public $manual;
     public $volume;
     public $status;
     private $conexao;
 
-    public function __construct($idProduto = null, $descricao = null, $manual = null, $volume = null, $status = null)
+    public function __construct($idProduto = null, $descricao = null, $venda = null, $manual = null, $volume = null, $status = null)
     {
         $this->idProduto = $idProduto;
         $this->descricao = $descricao;
+        $this->venda = $venda;
         $this->manual = $manual;
         $this->volume = $volume;
         $this->status = $status;
@@ -24,10 +26,11 @@ class ProdutoModel
     
     public function cadastrar()
     {
-        $stmt = $this->conexao->prepare("INSERT INTO tb_produto(descricao, manual, volume, status) VALUES (?,?,?,?)");
+        $stmt = $this->conexao->prepare("INSERT INTO tb_produto(descricao, venda, manual, volume, status) VALUES (?,?,?,?,?)");
         $stmt->bind_param(
-            "sisi",
+            "ssisi",
             $this->descricao,
+            $this->venda,
             $this->manual,
             $this->volume,
             $this->status

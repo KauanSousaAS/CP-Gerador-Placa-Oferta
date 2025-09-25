@@ -3,15 +3,13 @@
 require_once(__DIR__ . '/../config/conexao.php');
 
 class PrecoModel {
-    public $venda;
     public $preco;
     public $quantidade;
     public $uf;
     public $fkProduto;
     private $conexao;
 
-    public function __construct($venda = null, $preco = null, $quantidade = null, $uf = null, $fkProduto = null) {
-        $this->venda = $venda;
+    public function __construct($preco = null, $quantidade = null, $uf = null, $fkProduto = null) {
         $this->preco = $preco;
         $this->quantidade = $quantidade;
         $this->uf = $uf;
@@ -20,10 +18,9 @@ class PrecoModel {
     }
     
     public function cadastrar() {
-        $stmt = $this->conexao->prepare("INSERT INTO tb_preco (venda, preco, quantidade, uf, fk_produto) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->conexao->prepare("INSERT INTO tb_preco (preco, quantidade, uf, fk_produto) VALUES (?, ?, ?, ?)");
         $stmt->bind_param(
-            "sdisi",
-            $this->venda,
+            "disi",
             $this->preco,
             $this->quantidade,
             $this->uf,
@@ -35,19 +32,9 @@ class PrecoModel {
     public function buscar($id, $uf) {
         $sql = "SELECT * FROM tb_preco WHERE fk_produto = ? AND uf = ?";
 
-        // if ($uf) {
-        //     $sql .= " AND uf = ?";
-        // }
-
         $stmt = $this->conexao->prepare($sql);
         
         $stmt->bind_param("is", $id, $uf);
-
-        // if ($uf) {
-        //     $stmt->bind_param("is", $id, $uf);
-        // } else {
-        //     $stmt->bind_param("i", $id);
-        // }
 
         $stmt->execute();
 
