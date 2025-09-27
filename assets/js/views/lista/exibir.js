@@ -28,6 +28,8 @@ window.addEventListener('message', function (event) {
         .then(data => {
             data.forEach(produto => {
 
+                console.log(produto);
+
                 // Cria a placa
                 const placa = gerarPlaca(produto);
 
@@ -47,11 +49,11 @@ window.addEventListener('message', function (event) {
         const construtor = new Construtor();
 
         let placa = construtor.criar("div", {
-            class: "panfleto"
+            class: "placa"
         }, [
             // Adiciona a descrição do produto
             construtor.criar("div", {
-                class: "descricao"
+                class: "placa__descricao"
             }, [
                 produto.codigos.join(";") + " - " + produto.descricao,
             ]),
@@ -60,7 +62,7 @@ window.addEventListener('message', function (event) {
                     precoProdutoUnitario(produto.precos[0].preco)
                     :
                     ((produto.venda === "QN") ?
-                        precoProdutoQuantidade(produto.precos)
+                        precoProdutoQuantidade(produto.precos, produto.volume)
                         :
                         console.log("ERRO")))
                 :
@@ -79,7 +81,6 @@ window.addEventListener('message', function (event) {
         // =========================================================================
         // Observação: as porcentagems serão atributos variáveis manipulados 
         // =========================================================================
-
 
         // Calcula os valores para 3 parcelas
         let valorParcela1 = (preco * 1.04);
@@ -100,11 +101,8 @@ window.addEventListener('message', function (event) {
 
         let valorParcela6xTotal = (formatarNumeroComDecimais(valorParcela6x * 6));
 
-
-
-        // Criar 
-        let tela = construtor.criar("div", {
-            class: "tela"
+        let quadro = construtor.criar("div", {
+            class: "placa__quadro"
         }, [
             construtor.criar("div", {
                 class: "valorUnitario"
@@ -136,7 +134,7 @@ window.addEventListener('message', function (event) {
             ])
         ]);
 
-        tela.appendChild(
+        quadro.appendChild(
             construtor.criar("div", {
                 class: "parcela"
             }, [
@@ -159,7 +157,7 @@ window.addEventListener('message', function (event) {
                         construtor.criar("div", {
                             class: "parcela_rs"
                         }, [
-                            " R$"
+                            " R$ "
                         ]),
                         construtor.criar("div", {
                             class: "parcela_preco"
@@ -187,12 +185,12 @@ window.addEventListener('message', function (event) {
                         construtor.criar("div", {
                             class: "parcela_vezes"
                         }, [
-                            "3X"
+                            "6X"
                         ]),
                         construtor.criar("div", {
                             class: "parcela_rs"
                         }, [
-                            " R$"
+                            " R$ "
                         ]),
                         construtor.criar("div", {
                             class: "parcela_preco"
@@ -213,180 +211,178 @@ window.addEventListener('message', function (event) {
             ])
         );
 
-        return tela;
+        return quadro;
     }
 
-    function precoProdutoQuantidade(precos) {
+    function precoProdutoQuantidade(precos, volume) {
         // Chama o construtor de elementos HTML
         const construtor = new Construtor();
 
-        // return tela;
-    }
-
-    function adicionarValorQuantidade(dadosProdutoQuantidade) {
         // valor primeira quantidade
-        dadosProdutoQuantidade[0].tipo_produto = converteCodTipo(dadosProdutoQuantidade[0].tipo_produto);
-        dadosProdutoQuantidade[0].valor = formatarNumeroComDecimais(dadosProdutoQuantidade[0].valor);
-        dadosProdutoQuantidade[1].tipo_produto = converteCodTipo(dadosProdutoQuantidade[1].tipo_produto);
-        dadosProdutoQuantidade[1].valor = formatarNumeroComDecimais(dadosProdutoQuantidade[1].valor);
-        dadosProdutoQuantidade[2].tipo_produto = converteCodTipo(dadosProdutoQuantidade[2].tipo_produto);
-        dadosProdutoQuantidade[2].valor = formatarNumeroComDecimais(dadosProdutoQuantidade[2].valor);
+        volume = converteCodTipo(volume);
 
-        console.log(dadosProdutoQuantidade);
+        precos[0].preco = formatarNumeroComDecimais(precos[0].preco);
+        precos[1].preco = formatarNumeroComDecimais(precos[1].preco);
+        precos[2].preco = formatarNumeroComDecimais(precos[2].preco);
 
-        // div do panfleto
-        let panfletoQuantidade = document.createElement('div');
+        console.log(precos);
 
-        // Area para o primeiro preço
-        let panfletoQuantidadeDiv1 = document.createElement('div');
-        // Area sobre a area para o primeiro preço
-        let panfletoQuantidadeDiv11 = document.createElement('div');
-        // Texto para "preço para XX" primeiro preço
-        let panfletoQuantidadeDiv111 = document.createElement('div');
-        // Area do valor do primeiro preço
-        let panfletoQuantidadeDiv112 = document.createElement('div');
-        // Simbolo "R$" do primeiro preço
-        let panfletoQuantidadeDiv1121 = document.createElement('div');
-        // Preço inteiro para o primeiro preço
-        let panfletoQuantidadeDiv1122 = document.createElement('div');
-        // Area para os centavos e o texto "XX \n À vista" primeiro preço
-        let panfletoQuantidadeDiv1123 = document.createElement('div');
-        // Centavos do primeiro produto
-        let panfletoQuantidadeDiv11231 = document.createElement('div');
-        // Texto "XX \n À vista" primeiro produto 
-        let panfletoQuantidadeDiv11232 = document.createElement('div');
+        console.log("\n");
 
-        // Area para o segundo e terceiro preço
-        let panfletoQuantidadeDiv2 = document.createElement('div');
+        console.log(volume);
 
-        // Area para o segundo preço
-        let panfletoQuantidadeDiv21 = document.createElement('div');
-        // Area sobre area para o segundo preço
-        let panfletoQuantidadeDiv211 = document.createElement('div');
-        // Texto para "preço para XX" segundo preço
-        let panfletoQuantidadeDiv2111 = document.createElement('div');
-        // Area do valor do segundo preço
-        let panfletoQuantidadeDiv2112 = document.createElement('div');
-        // Simbolo "R$" do segundo preço
-        let panfletoQuantidadeDiv21121 = document.createElement('div');
-        // Preço inteiro para o segundo preço
-        let panfletoQuantidadeDiv21122 = document.createElement('div');
-        // Area para os centavos e o texto "XX \n À vista" segundo preço
-        let panfletoQuantidadeDiv21123 = document.createElement('div');
-        // Centavos do segundo produto
-        let panfletoQuantidadeDiv211231 = document.createElement('div');
-        // Texto "XX \n À vista" segundo produto
-        let panfletoQuantidadeDiv211232 = document.createElement('div');
+        let quadro = construtor.criar("div", {
+            class: "placa__quadro__quantidade"
+        }, [
+            construtor.criar("div", {
+                class: "quadro__quantidade"
+            }, [
+                construtor.criar("div", {
+                    class: "primeiro"
+                }, [
+                    construtor.criar("div", {
+                        class: "primeiro__descricao"
+                    }, [
+                        "Preço p/ " + volume.singular
+                    ]),
+                    construtor.criar("div", {
+                        class: "primeiro__preco"
+                    }, [
+                        construtor.criar("div", {
+                            class: "primeiro__preco__rs"
+                        }, [
+                            "R$"
+                        ]),
+                        construtor.criar("div", {
+                            class: "primeiro__preco__inteiro"
+                        }, [
+                            precos[0].preco.valorInteiro
+                        ]),
+                        construtor.criar("div", {
+                            class: "primeiro__centavo__avista"
+                        }, [
+                            construtor.criar("div", {
+                                class: "primeiro__preco__centavo"
+                            }, [
+                                "," + precos[0].preco.centavo
+                            ]),
+                            construtor.criar("div", {
+                                class: "primeiro__cadaavista"
+                            }, [
+                                "Cada"
+                            ]),
+                            construtor.criar("div", {
+                                class: "primeiro__cadaavista"
+                            }, [
+                                "À vista"
+                            ])
+                        ])
+                    ])
+                ])
+            ]),
+            construtor.criar("div", {
+                class: "quadro__quantidade__subprecos"
+            }, [
+                construtor.criar("div", {
+                    class: "subprecos"
+                }, [
+                    construtor.criar("div", {
+                        class: "subprecos__segundo"
+                    }, [
+                        construtor.criar("div", {
+                            class: "subprecos__descricao"
+                        }, [
+                            "Preço p/ " + precos[1].quantidade + " " + volume.plural
+                        ]),
+                        construtor.criar("div", {
+                            class: "subprecos__preco"
+                        }, [
+                            construtor.criar("div", {
+                                class: "subprecos__preco__rs"
+                            }, [
+                                "R$"
+                            ]),
+                            construtor.criar("div", {
+                                class: "subprecos__preco__inteiro"
+                            }, [
+                                precos[1].preco.valorInteiro
+                            ]),
+                            construtor.criar("div", {
+                                class: "subprecos__centavo__avista"
+                            }, [
+                                construtor.criar("div", {
+                                    class: "subprecos__preco__centavo"
+                                }, [
+                                    "," + precos[1].preco.centavo
+                                ]),
+                                construtor.criar("div", {
+                                    class: "subprecos__cadaavista"
+                                }, [
+                                    "Cada"
+                                ]),
+                                construtor.criar("div", {
+                                    class: "subprecos__cadaavista"
+                                }, [
+                                    "À vista"
+                                ])
+                            ])
+                        ])
+                    ])
+                ]),
+                construtor.criar("div", {
+                    class: "subprecos"
+                }, [
+                    construtor.criar("div", {
+                        class: "terceiro"
+                    }, [
+                        construtor.criar("div", {
+                            class: "subprecos__descricao"
+                        }, [
+                            "Preço p/ " + precos[2].quantidade + " " + volume.plural
+                        ]),
+                        construtor.criar("div", {
+                            class: "subprecos__preco"
+                        }, [
+                            construtor.criar("div", {
+                                class: "subprecos__preco__rs"
+                            }, [
+                                "R$"
+                            ]),
+                            construtor.criar("div", {
+                                class: "subprecos__preco__inteiro"
+                            }, [
+                                precos[2].preco.valorInteiro
+                            ]),
+                            construtor.criar("div", {
+                                class: "subprecos__centavo__avista"
+                            }, [
+                                construtor.criar("div", {
+                                    class: "subprecos__preco__centavo"
+                                }, [
+                                    "," + precos[2].preco.centavo
+                                ]),
+                                construtor.criar("div", {
+                                    class: "subprecos__cadaavista"
+                                }, [
+                                    "Cada"
+                                ]),
+                                construtor.criar("div", {
+                                    class: "subprecos__cadaavista"
+                                }, [
+                                    "À vista"
+                                ])
+                            ])
+                        ])
+                    ])
+                ])
+            ])
+        ])
 
-        // Area para o terceiro preço
-        let panfletoQuantidadeDiv22 = document.createElement('div');
-        // Area para area para o terceiro preço
-        let panfletoQuantidadeDiv221 = document.createElement('div');
-        // Texto para "preço para XX" terceiro preço
-        let panfletoQuantidadeDiv2211 = document.createElement('div');
-        // Area do valor do terceiro preço
-        let panfletoQuantidadeDiv2212 = document.createElement('div');
-        // Simbolo "R$" do terceiro preço
-        let panfletoQuantidadeDiv22121 = document.createElement('div');
-        // Preço inteiro para o terceiro preço
-        let panfletoQuantidadeDiv22122 = document.createElement('div');
-        // Area para os centavos e o texto "XX \n À vista" terceiro preço
-        let panfletoQuantidadeDiv22123 = document.createElement('div');
-        // Centavos do terceiro produto
-        let panfletoQuantidadeDiv221231 = document.createElement('div');
-        // Texto "XX \n À vista" terceiro produto
-        let panfletoQuantidadeDiv221232 = document.createElement('div');
-
-        // Adicionando as classes as divs
-        panfletoQuantidade.className = 'panfletoQuantidade';
-        panfletoQuantidadeDiv1.className = 'panfletoQuantidadeDiv1';
-        panfletoQuantidadeDiv11.className = 'panfletoQuantidadeDiv11';
-        panfletoQuantidadeDiv111.className = 'panfletoQuantidadeDiv111';
-        panfletoQuantidadeDiv112.className = 'panfletoQuantidadeDiv112';
-        panfletoQuantidadeDiv1121.className = 'panfletoQuantidadeDiv1121';
-        panfletoQuantidadeDiv1122.className = 'panfletoQuantidadeDiv1122';
-        panfletoQuantidadeDiv1123.className = 'panfletoQuantidadeDiv1123';
-        panfletoQuantidadeDiv11231.className = 'panfletoQuantidadeDiv11231';
-        panfletoQuantidadeDiv11232.className = 'panfletoQuantidadeDiv11232';
-        // Adicionando as classes as divs
-        panfletoQuantidadeDiv2.className = 'panfletoQuantidadeDiv2';
-
-        panfletoQuantidadeDiv21.className = 'panfletoQuantidadeDiv21';
-        panfletoQuantidadeDiv211.className = 'panfletoQuantidadeDiv211';
-        panfletoQuantidadeDiv2111.className = 'panfletoQuantidadeDiv2111';
-        panfletoQuantidadeDiv2112.className = 'panfletoQuantidadeDiv2112';
-        panfletoQuantidadeDiv21121.className = 'panfletoQuantidadeDiv21121';
-        panfletoQuantidadeDiv21122.className = 'panfletoQuantidadeDiv21122';
-        panfletoQuantidadeDiv21123.className = 'panfletoQuantidadeDiv21123';
-        panfletoQuantidadeDiv211231.className = 'panfletoQuantidadeDiv211231';
-        panfletoQuantidadeDiv211232.className = 'panfletoQuantidadeDiv211232';
-        // Adicionando as classes as divs
-        panfletoQuantidadeDiv22.className = 'panfletoQuantidadeDiv22';
-        panfletoQuantidadeDiv221.className = 'panfletoQuantidadeDiv221';
-        panfletoQuantidadeDiv2211.className = 'panfletoQuantidadeDiv2211';
-        panfletoQuantidadeDiv2212.className = 'panfletoQuantidadeDiv2212';
-        panfletoQuantidadeDiv22121.className = 'panfletoQuantidadeDiv22121';
-        panfletoQuantidadeDiv22122.className = 'panfletoQuantidadeDiv22122';
-        panfletoQuantidadeDiv22123.className = 'panfletoQuantidadeDiv22123';
-        panfletoQuantidadeDiv221231.className = 'panfletoQuantidadeDiv221231';
-        panfletoQuantidadeDiv221232.className = 'panfletoQuantidadeDiv221232';
-
-        // Atribuindo valor as divs primeiro preço
-        panfletoQuantidadeDiv111.innerHTML = "Preço p/ " + dadosProdutoQuantidade[0].tipo_produto.singular;
-        panfletoQuantidadeDiv1121.innerHTML = "R$";
-        panfletoQuantidadeDiv1122.innerHTML = dadosProdutoQuantidade[0].valor.valorInteiro;
-        panfletoQuantidadeDiv11231.innerHTML = "," + dadosProdutoQuantidade[0].valor.centavo;
-        panfletoQuantidadeDiv11232.innerHTML = "Cada<br>À vista";
-        // Atribuindo valor as divs segundo preço
-        panfletoQuantidadeDiv2111.innerHTML = "Preço p/ " + dadosProdutoQuantidade[1].quantidade + " " + dadosProdutoQuantidade[1].tipo_produto.plural;
-        panfletoQuantidadeDiv21121.innerHTML = "R$";
-        panfletoQuantidadeDiv21122.innerHTML = dadosProdutoQuantidade[1].valor.valorInteiro;
-        panfletoQuantidadeDiv211231.innerHTML = "," + dadosProdutoQuantidade[1].valor.centavo;;
-        panfletoQuantidadeDiv211232.innerHTML = "Cada<br>À vista";
-        // Atribuindo valor as divs terceiro preço
-        panfletoQuantidadeDiv2211.innerHTML = "Preço p/ " + dadosProdutoQuantidade[2].quantidade + " " + dadosProdutoQuantidade[2].tipo_produto.plural;
-        panfletoQuantidadeDiv22121.innerHTML = "R$";
-        panfletoQuantidadeDiv22122.innerHTML = dadosProdutoQuantidade[2].valor.valorInteiro;
-        panfletoQuantidadeDiv221231.innerHTML = "," + dadosProdutoQuantidade[2].valor.centavo;
-        panfletoQuantidadeDiv221232.innerHTML = "Cada<br>À vista";
-
-        // Gerando div do primeiro preço
-        panfletoQuantidadeDiv1123.appendChild(panfletoQuantidadeDiv11231);
-        panfletoQuantidadeDiv1123.appendChild(panfletoQuantidadeDiv11232);
-        panfletoQuantidadeDiv112.appendChild(panfletoQuantidadeDiv1121);
-        panfletoQuantidadeDiv112.appendChild(panfletoQuantidadeDiv1122);
-        panfletoQuantidadeDiv112.appendChild(panfletoQuantidadeDiv1123);
-        panfletoQuantidadeDiv11.appendChild(panfletoQuantidadeDiv111);
-        panfletoQuantidadeDiv11.appendChild(panfletoQuantidadeDiv112);
-        panfletoQuantidadeDiv1.appendChild(panfletoQuantidadeDiv11);
-        panfletoQuantidade.appendChild(panfletoQuantidadeDiv1);
-        // Gerando div do segundo preço
-        panfletoQuantidadeDiv21123.appendChild(panfletoQuantidadeDiv211231);
-        panfletoQuantidadeDiv21123.appendChild(panfletoQuantidadeDiv211232);
-        panfletoQuantidadeDiv2112.appendChild(panfletoQuantidadeDiv21121);
-        panfletoQuantidadeDiv2112.appendChild(panfletoQuantidadeDiv21122);
-        panfletoQuantidadeDiv2112.appendChild(panfletoQuantidadeDiv21123);
-        panfletoQuantidadeDiv211.appendChild(panfletoQuantidadeDiv2111);
-        panfletoQuantidadeDiv211.appendChild(panfletoQuantidadeDiv2112);
-        panfletoQuantidadeDiv21.appendChild(panfletoQuantidadeDiv211);
-        panfletoQuantidadeDiv2.appendChild(panfletoQuantidadeDiv21);
-        // Gerando div do terceiro preço
-        panfletoQuantidadeDiv22123.appendChild(panfletoQuantidadeDiv221231);
-        panfletoQuantidadeDiv22123.appendChild(panfletoQuantidadeDiv221232);
-        panfletoQuantidadeDiv2212.appendChild(panfletoQuantidadeDiv22121);
-        panfletoQuantidadeDiv2212.appendChild(panfletoQuantidadeDiv22122);
-        panfletoQuantidadeDiv2212.appendChild(panfletoQuantidadeDiv22123);
-        panfletoQuantidadeDiv221.appendChild(panfletoQuantidadeDiv2211);
-        panfletoQuantidadeDiv221.appendChild(panfletoQuantidadeDiv2212);
-        panfletoQuantidadeDiv22.appendChild(panfletoQuantidadeDiv221);
-        panfletoQuantidadeDiv2.appendChild(panfletoQuantidadeDiv22);
-
-        panfletoQuantidade.appendChild(panfletoQuantidadeDiv2);
-
-        return panfletoQuantidade;
+        return quadro;
     }
 
     // Utilitários
+
     function formatarNumero(numero) {
         // Verifica se o número é válido
         if (isNaN(numero)) {
@@ -423,57 +419,49 @@ window.addEventListener('message', function (event) {
         // Recombina a parte inteira e a parte decimal
         return numeroSeparado;
     }
-    function converteCodTipo(numero) {
-        let tipo = { singular: "", plural: "" };
+    function converteCodTipo(volumeSigla) {
+        let volume = { singular: "", plural: "" };
 
-        switch (+numero) {
-            case 1:
-                tipo.singular = "unidade";
-                tipo.plural = "unidades";
+        switch (volumeSigla) {
+            case "UN":
+                volume.singular = "unidade";
+                volume.plural = "unidades";
                 break;
-            case 2:
-                tipo.singular = "quilo";
-                tipo.plural = "quilos";
+            case "KG":
+                volume.singular = "quilo";
+                volume.plural = "quilos";
                 break;
-            case 3:
-                tipo.singular = "metro";
-                tipo.plural = "metros";
+            case "MT":
+                volume.singular = "metro";
+                volume.plural = "metros";
                 break;
-            case 4:
-                tipo.singular = "rolo";
-                tipo.plural = "rolos";
+            case "RL":
+                volume.singular = "rolo";
+                volume.plural = "rolos";
                 break;
-            case 5:
-                tipo.singular = "par";
-                tipo.plural = "pares";
+            case "PR":
+                volume.singular = "par";
+                volume.plural = "pares";
                 break;
-            case 6:
-                tipo.singular = "caixa";
-                tipo.plural = "caixas";
+            case "CX":
+                volume.singular = "caixa";
+                volume.plural = "caixas";
                 break;
-            case 7:
-                tipo.singular = "cento";
-                tipo.plural = "centos";
+            case "CT":
+                volume.singular = "cento";
+                volume.plural = "centos";
                 break;
-            case 8:
-                tipo.singular = "milheiro";
-                tipo.plural = "milheiros";
+            case "ML":
+                volume.singular = "milheiro";
+                volume.plural = "milheiros";
                 break;
             default:
-                tipo.singular = "desconhecido";
-                tipo.plural = "desconhecidos";
+                volume.singular = "erro";
+                volume.plural = "erro";
                 break;
         }
 
-        return tipo;
-    }
-    function criarDiv(classeDiv, conteudoDiv) {
-        let div = document.createElement('div');
-        div.className = classeDiv;
-        if (conteudoDiv != null) {
-            div.innerHTML = conteudoDiv;
-        }
-        return div;
+        return volume;
     }
     function tirarMediaParcela(numero) {
         if ((numero - Math.floor(numero)) >= 0.25 && (numero - Math.floor(numero)) <= 0.75) {

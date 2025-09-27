@@ -4,6 +4,11 @@ body {
     border: 0;
 }
 
+#dados {
+    padding: 0;
+    border: 0;
+}
+
 @media print {
 
     /* Remove margens */
@@ -18,12 +23,14 @@ body {
     }
 }
 
-#dados {
-    padding: 0;
-    border: 0;
+@font-face {
+    font-family: 'Klavika CH';
+    src: url('/assets/fonts/KlavikaCH-BoldCondIt.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
 }
 
-.panfleto {
+.placa {
     background-image: url('/assets/images/fundo.png');
     background-size: 297mm 210mm;
     background-position: center;
@@ -37,19 +44,7 @@ body {
     page-break-inside: avoid;
 }
 
-/* -------------------------------------------------------------------------------------------- unitario */
-.tela {
-    padding: 0;
-    border: 0;
-    margin: 75mm 56mm 29mm 56mm;
-    width: 186mm;
-    height: 105mm;
-    display: flex;
-    position: absolute;
-    justify-content: center;
-}
-
-.descricao {
+.placa__descricao {
     padding: 0;
     border: 0;
     margin-top: 33mm;
@@ -59,27 +54,34 @@ body {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
-@font-face {
-    font-family: 'Klavika CH';
-    src: url('/assets/fonts/KlavikaCH-BoldCondIt.otf') format('opentype');
-    font-weight: bold;
-    font-style: italic;
+.placa__quadro {
+    padding: 0;
+    border: 0;
+    margin: 75mm 56mm 29mm 56mm;
+    width: 186mm;
+    height: 105mm;
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    font-family: 'Klavika CH', sans-serif;
 }
 
+
+
 .valorUnitario {
-    font-family: 'Klavika CH', sans-serif;
-    color: #EE3738;
     padding: 0;
     border: 0;
     position: absolute;
     display: flex;
     align-items: flex-end;
     margin-left: -40px;
+    color: #EE3738;
 }
 
 .textoRs {
     font-size: 50px;
     margin-bottom: 11mm;
+    margin-right: 5mm;
 }
 
 .valorInt {
@@ -167,22 +169,20 @@ body {
 
 /* -------------------------------------------------------------------------------------------- quantidade */
 
-.panfletoQuantidade {
+.placa__quadro__quantidade {
     padding: 0;
     border: 0;
-    margin: 75mm 48mm 40mm 48mm;
-    width: 200mm;
-    height: 95mm;
+    margin: 75mm 56mm 29mm 56mm;
+    width: 186mm;
+    height: 105mm;
     display: block;
     position: absolute;
-    font-family: 'Klavika CH';
-    src: url('fonts/KlavikaCH-BoldCondIt.otf') format('otf');
-    font-weight: bold;
-    font-style: italic;
+    justify-content: center;
+    font-family: 'Klavika CH', sans-serif;
     color: #EE3738;
 }
 
-.panfletoQuantidadeDiv1 {
+.quadro__quantidade {
     padding: 0;
     border: 0;
     margin: 0;
@@ -192,17 +192,17 @@ body {
     justify-content: center;
 }
 
-.panfletoQuantidadeDiv111 {
+.primeiro__descricao {
     color: black;
     font-size: 30px;
 }
 
-.panfletoQuantidadeDiv112 {
+.primeiro__preco {
     display: flex;
     margin-top: -30px;
 }
 
-.panfletoQuantidadeDiv1121 {
+.primeiro__preco__rs {
     font-size: 50px;
     margin-bottom: 18px;
     color: #EE3738;
@@ -210,28 +210,29 @@ body {
     align-items: flex-end;
 }
 
-.panfletoQuantidadeDiv1122 {
+.primeiro__preco__inteiro {
     display: inline-block;
     font-size: 200px;
     margin: -23px 0;
 }
 
-.panfletoQuantidadeDiv11231 {
+.primeiro__preco__centavo {
     font-size: 100px;
     margin-bottom: 3mm;
     margin-left: 10px;
 }
 
-.panfletoQuantidadeDiv11232 {
+.primeiro__cadaavista {
     color: black;
     text-align: right;
     font-size: 30px;
-    margin-top: -25px;
-    line-height: 28px;
+    margin-top: -42px;
+    line-height: 70px;
+    display: block;
 }
 
 /* Layout para o segundo e terceiro preço de quantidade */
-.panfletoQuantidadeDiv2 {
+.quadro__quantidade__subprecos {
     padding: 0;
     border: 0;
     margin: 0;
@@ -241,7 +242,7 @@ body {
     justify-content: center;
 }
 
-.panfletoQuantidadeDiv21, .panfletoQuantidadeDiv22 {
+.subprecos {
     padding: 0;
     border: 0;
     margin: 0;
@@ -249,41 +250,43 @@ body {
     height: 45mm;
     display: flex;
     justify-content: center;
+    color: #EE3738;
 }
 
-.panfletoQuantidadeDiv2111, .panfletoQuantidadeDiv2211{
+.subprecos__descricao {
     color: black;
     font-size: 25px;
 }
 
-.panfletoQuantidadeDiv2112, .panfletoQuantidadeDiv2212{
+.subprecos__preco {
     display: flex;
 }
 
-.panfletoQuantidadeDiv21121, .panfletoQuantidadeDiv22121{
+.subprecos__preco__rs {
     font-size: 40px;
     margin-bottom: 5px;
     display: flex;
     align-items: flex-end;
 }
 
-.panfletoQuantidadeDiv21122, .panfletoQuantidadeDiv22122{
+.subprecos__preco__inteiro {
     font-size: 150px;
     margin: -28px 0;
 }
 
-.panfletoQuantidadeDiv211231, .panfletoQuantidadeDiv221231{
+.subprecos__preco__centavo {
     font-size: 50px;
     margin-bottom: 3mm;
     margin-left: 8px;
 }
 
-.panfletoQuantidadeDiv211232, .panfletoQuantidadeDiv221232{
+.subprecos__cadaavista {
     color: black;
     text-align: right;
     font-size: 22px;
     margin-top: -3px;
     line-height: 22px;
+    display: block;
 }
 
 
