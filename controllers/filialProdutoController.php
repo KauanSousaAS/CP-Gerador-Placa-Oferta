@@ -19,12 +19,12 @@ class filialProdutoController
         $resultado = [];
 
         if (!($filialProdutos === null)) {
-            $filialProdutos[0]['situacao'] = $filialProdutos[0]['status'];
-
-            unset($filialProdutos[0]['status']);
-
 
             foreach ($filialProdutos as &$produto) {
+                $produto['situacao'] = $produto['status'];
+
+                unset($produto['status']);
+
                 $p = $produtoModel->buscar($produto['fk_produto']);
 
                 $p = $p[0];
@@ -73,16 +73,25 @@ class filialProdutoController
     {
         $dados = json_decode(file_get_contents('php://input'), true);
 
-        // require_once(__DIR__ . '/../models/filialProdutoModel.php');
+        require_once(__DIR__ . '/../models/filialProdutoModel.php');
 
-        // $filialProdutoModel = new filialProdutoModel();
+        $filialProdutoModel = new filialProdutoModel();
 
-        // $resultado;
+        foreach ($dados['ids'] as $id) {
+            $filialProdutoModel->excluir($id, $dados['filial']);
+        }
+    }
 
-        // foreach ($dados['ids'] as $id) {
-        //     $resultado = $filialProdutoModel->excluir($id, $dados['filial']);
-        // }
+    public function concluir()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
 
-        echo json_encode($dados);
+        require_once(__DIR__ . '/../models/filialProdutoModel.php');
+
+        $filialProdutoModel = new filialProdutoModel();
+
+        foreach ($dados['ids'] as $id) {
+            $filialProdutoModel->concluir($id, $dados['filial']);
+        }
     }
 }

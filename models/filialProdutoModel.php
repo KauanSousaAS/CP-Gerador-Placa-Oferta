@@ -46,7 +46,7 @@ class FilialProdutoModel
         if (!$resultado) {
             throw new Exception("Erro ao obter resultados: " . $stmt->error);
         }
-        
+
         $lista = [];
         while ($row = $resultado->fetch_assoc()) {
             $lista[] = $row;
@@ -117,7 +117,7 @@ class FilialProdutoModel
         }
     }
 
-    public function excluir($id_produto, $id_filial)
+    public function excluir($produto, $filial)
     {
         $sql = "DELETE FROM tb_filial_produto WHERE fk_produto = ? AND fk_filial = ?;";
 
@@ -127,7 +127,7 @@ class FilialProdutoModel
             throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
         }
 
-        $stmt->bind_param("ii", $id_produto, $id_filial);
+        $stmt->bind_param("ii", $produto, $filial);
 
         if (!$stmt) {
             throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
@@ -135,6 +135,26 @@ class FilialProdutoModel
 
         if (!$stmt->execute()) {
             throw new Exception("Erro ao excluir produto da filial: " + $stmt->error);
+        }
+    }
+
+    public function concluir($produto, $filial) {
+        $sql = "UPDATE tb_filial_produto SET status = 1 WHERE fk_produto = ? AND fk_filial = ?;";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if(!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("ii", $produto, $filial);
+
+        if (!$stmt){
+            throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
+        }
+
+        if(!$stmt->execute()){
+            throw new Exception("Erro ao alterar o status do produto pela filial: " . $this->conexao->error);
         }
     }
 }

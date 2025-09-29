@@ -123,7 +123,6 @@ function pesquisarProdutoFilial() {
         });
 }
 
-
 function carregarProdutoFilial(id_filial) {
 
     fetch('/index.php/filialProduto/listar', {
@@ -182,14 +181,14 @@ function carregarProdutoFilial(id_filial) {
                     ]),
                     construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
                     construtor.criar("td", {}, [produto.estoque_filial]),
-                    construtor.criar("td", {}, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : "Desativado")]),
+                    construtor.criar("td", {}, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : (produto.situacao == 0 ? "Desativado" : "Erro"))]),
                     construtor.criar("td", {}, [formatarDataHora(produto.ultimo_exibir)]),
                     construtor.criar("td", {}, [produto.status == 1 ? "Ativo" : "Inativo"]),
                     construtor.criar("td", {}, [
                         construtor.criar("button", {
                             type: "button",
-                            onclick: () => excluirProdutoFilial(produto.fk_produto, document.getElementById('seletorFilial').value)
-                        }, ["Excluir"])
+                            onclick: () => console.log(produto.fk_produto, document.getElementById('seletorFilial').value)
+                        }, ["Botão"])
                     ])
                 ]);
                 // Adiciona a linha à tabela
@@ -238,15 +237,60 @@ function vincularProdutoFilial(id_produto) {
         });
 }
 
-function excluirProdutoFilial($produto, $filial) {
+function exibir() {
+    const novaJanela = window.open('exibir.php', '_blank');
+
+    // Aguarda a nova aba carregar completamente
+    novaJanela.onload = function () {
+        novaJanela.postMessage({
+            ids: capturarSelecionados(),
+            filial: document.getElementById('seletorFilial').value
+        }, '*');
+    };
+}
+
+function excluir() {
     fetch('/index.php/filialProduto/excluir', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            id_filial: $filial,
-            id_produto: $produto
+            ids: capturarSelecionados(),
+            filial: document.getElementById('seletorFilial').value
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                // Se status for 400, 404, 500 etc.
+                return response.json().then(err => {
+                    // Exibi o erro no console, caso houver.
+                    if (err.erro != null) {
+                        alert(err.erro);
+                    } else {
+                        throw new Error("Erro desconhecido");
+                    }
+                });
+            }
+            return response.text();
+        })
+        .then(data => {
+            carregarProdutoFilial(document.getElementById('seletorFilial').value);
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+        });
+}
+
+function concluir() {
+    fetch('/index.php/filialProduto/concluir', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            ids: capturarSelecionados(),
+            filial: document.getElementById('seletorFilial').value
         })
     })
         .then(response => {
@@ -292,6 +336,7 @@ function formatarDataHora(dataStr) {
     return `${dia}/${mes}/${ano} - ${hora}:${min}`;
 }
 
+// Capturar produtos selecionados
 function capturarSelecionados() {
     const checkboxes = document.querySelectorAll('.produtoSelecionado:checked');
 
@@ -300,51 +345,7 @@ function capturarSelecionados() {
     return ids;
 }
 
-function exibir() {
-    const novaJanela = window.open('exibir.php', '_blank');
-
-    // Aguarda a nova aba carregar completamente
-    novaJanela.onload = function () {
-        novaJanela.postMessage({
-            ids: capturarSelecionados(),
-            filial: document.getElementById('seletorFilial').value
-        }, '*');
-    };
-}
-
-function excluir() {
-    fetch('/index.php/filialProduto/excluir', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            ids: capturarSelecionados(),
-            filial: document.getElementById('seletorFilial').value
-        })
-    })
-        .then(response => {
-            if (!response.ok) {
-                // Se status for 400, 404, 500 etc.
-                return response.json().then(err => {
-                    // Exibi o erro no console, caso houver.
-                    if (err.erro != null) {
-                        alert(err.erro);
-                    } else {
-                        throw new Error("Erro desconhecido");
-                    }
-                });
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Erro na requisição:', error);
-        });
-}
-
+// será fracionado
 function acoesExecutar(acao) {
 
     switch (acao) {
