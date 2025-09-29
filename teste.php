@@ -8,4 +8,4 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-$_SESSION['idUsuario'] = 123;
+session_destroy();

@@ -21,10 +21,9 @@ class FilialProdutoModel
         $this->conexao = getConexao();
     }
 
-    public function buscar($id_filial)
+    public function buscar($id)
     {
-
-        if ($id_filial === null) {
+        if ($id === null) {
             throw new Exception("ID da filial não fornecido.");
         }
 
@@ -32,7 +31,7 @@ class FilialProdutoModel
 
         $stmt = $this->conexao->prepare($sql);
 
-        $stmt->bind_param("i", $id_filial);
+        $stmt->bind_param("i", $id);
 
         if (!$stmt) {
             throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
@@ -53,7 +52,7 @@ class FilialProdutoModel
             $lista[] = $row;
         }
 
-        return $lista;
+        return empty($lista) ? null : $lista;
     }
 
 

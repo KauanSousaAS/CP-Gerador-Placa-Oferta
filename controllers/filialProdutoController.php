@@ -14,31 +14,32 @@ class filialProdutoController
         $produtoModel = new produtoModel();
         $itemModel = new itemModel();
 
-        $filialProdutos = $filialProdutoModel->buscar($dados['id_filial']);
-
-        $filialProdutos[0]['situacao'] = $filialProdutos[0]['status'];
-
-        unset($filialProdutos[0]['status']);
+        $filialProdutos = $filialProdutoModel->buscar(intval($dados['id_filial']));
 
         $resultado = [];
 
-        foreach ($filialProdutos as &$produto) {
+        if (!($filialProdutos === null)) {
+            $filialProdutos[0]['situacao'] = $filialProdutos[0]['status'];
 
-            $p = $produtoModel->buscar($produto['fk_produto']);
+            unset($filialProdutos[0]['status']);
 
-            $p = $p[0];
-            
-            $c = $itemModel->buscar($produto['fk_produto']);
-            
-            $p['codigos'] = array_column($c, 'codigo');
 
-            unset($p['id_produto']);
+            foreach ($filialProdutos as &$produto) {
+                $p = $produtoModel->buscar($produto['fk_produto']);
 
-            $produto = array_merge($produto, $p);
-            
-            $resultado[] = $produto;
+                $p = $p[0];
+
+                $c = $itemModel->buscar($produto['fk_produto']);
+
+                $p['codigos'] = array_column($c, 'codigo');
+
+                unset($p['id_produto']);
+
+                $produto = array_merge($produto, $p);
+
+                $resultado[] = $produto;
+            }
         }
-
         echo json_encode($resultado);
     }
 
@@ -72,12 +73,16 @@ class filialProdutoController
     {
         $dados = json_decode(file_get_contents('php://input'), true);
 
-        require_once(__DIR__ . '/../models/filialProdutoModel.php');
+        // require_once(__DIR__ . '/../models/filialProdutoModel.php');
 
-        $filialProdutoModel = new filialProdutoModel();
+        // $filialProdutoModel = new filialProdutoModel();
 
-        $resultado = $filialProdutoModel->excluir($dados['id_produto'], $dados['id_filial']);
+        // $resultado;
 
-        echo json_encode($resultado);
+        // foreach ($dados['ids'] as $id) {
+        //     $resultado = $filialProdutoModel->excluir($id, $dados['filial']);
+        // }
+
+        echo json_encode($dados);
     }
 }

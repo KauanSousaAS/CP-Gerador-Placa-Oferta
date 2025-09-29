@@ -148,8 +148,6 @@ function carregarProdutoFilial(id_filial) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
-
             $listaProdutosFilial = document.getElementById("listaProdutosFilial");
 
             $listaProdutosFilial.innerHTML = "";
@@ -294,61 +292,101 @@ function formatarDataHora(dataStr) {
     return `${dia}/${mes}/${ano} - ${hora}:${min}`;
 }
 
-function acoesExecutar(acao) {
+function capturarSelecionados() {
     const checkboxes = document.querySelectorAll('.produtoSelecionado:checked');
 
     const ids = Array.from(checkboxes).map(cb => cb.value);
 
+    return ids;
+}
+
+function exibir() {
     const novaJanela = window.open('exibir.php', '_blank');
 
     // Aguarda a nova aba carregar completamente
     novaJanela.onload = function () {
         novaJanela.postMessage({
-            ids: ids,
+            ids: capturarSelecionados(),
             filial: document.getElementById('seletorFilial').value
         }, '*');
     };
+}
 
-    // switch (acao) {
-    //     case "exibir":
-    //         const novaJanela = window.open('../pages/exibir.html', '_blank');
+function excluir() {
+    fetch('/index.php/filialProduto/excluir', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            ids: capturarSelecionados(),
+            filial: document.getElementById('seletorFilial').value
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                // Se status for 400, 404, 500 etc.
+                return response.json().then(err => {
+                    // Exibi o erro no console, caso houver.
+                    if (err.erro != null) {
+                        alert(err.erro);
+                    } else {
+                        throw new Error("Erro desconhecido");
+                    }
+                });
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+        });
+}
 
-    //         // Aguarda a nova aba carregar completamente
-    //         novaJanela.onload = function () {
-    //             novaJanela.postMessage({
-    //                 ids: ids
-    //             }, '*');
-    //         };
-    //         break;
-    //     case "concluir":
-    //         const formDataConcluir = new FormData();
-    //         formDataConcluir.append('funcao', 'concluirAssociacaoProdutoFilial');
-    //         formDataConcluir.append('ids', JSON.stringify(ids));
+function acoesExecutar(acao) {
 
-    //         let xhrConcluir = new XMLHttpRequest();
-    //         xhrConcluir.open("POST", '../../php/funcoes.php', true);
-    //         xhrConcluir.onreadystatechange = function () {
-    //             if (xhrConcluir.readyState == 4 && xhrConcluir.status == 200) {
-    //                 loadData();
-    //                 console.log(xhrConcluir.responseText);
-    //             }
-    //         }
-    //         xhrConcluir.send(formDataConcluir);
-    //         break;
-    //     case "excluir":
-    //         const formDataExcluir = new FormData();
-    //         formDataExcluir.append('funcao', 'desvincularFilialProduto');
-    //         formDataExcluir.append('ids', JSON.stringify(ids));
+    switch (acao) {
+        case "exibir":
+            const novaJanela = window.open('../pages/exibir.html', '_blank');
 
-    //         let xhrExcluir = new XMLHttpRequest();
-    //         xhrExcluir.open("POST", '../../php/funcoes.php', true);
-    //         xhrExcluir.onreadystatechange = function () {
-    //             if (xhrExcluir.readyState == 4 && xhrExcluir.status == 200) {
-    //                 loadData();
-    //                 console.log(xhrExcluir.responseText);
-    //             }
-    //         }
-    //         xhrExcluir.send(formDataExcluir);
-    //         break;
-    // }
+            // Aguarda a nova aba carregar completamente
+            novaJanela.onload = function () {
+                novaJanela.postMessage({
+                    ids: ids
+                }, '*');
+            };
+            break;
+        case "concluir":
+            const formDataConcluir = new FormData();
+            formDataConcluir.append('funcao', 'concluirAssociacaoProdutoFilial');
+            formDataConcluir.append('ids', JSON.stringify(ids));
+
+            let xhrConcluir = new XMLHttpRequest();
+            xhrConcluir.open("POST", '../../php/funcoes.php', true);
+            xhrConcluir.onreadystatechange = function () {
+                if (xhrConcluir.readyState == 4 && xhrConcluir.status == 200) {
+                    loadData();
+                    console.log(xhrConcluir.responseText);
+                }
+            }
+            xhrConcluir.send(formDataConcluir);
+            break;
+        case "excluir":
+            const formDataExcluir = new FormData();
+            formDataExcluir.append('funcao', 'desvincularFilialProduto');
+            formDataExcluir.append('ids', JSON.stringify(ids));
+
+            let xhrExcluir = new XMLHttpRequest();
+            xhrExcluir.open("POST", '../../php/funcoes.php', true);
+            xhrExcluir.onreadystatechange = function () {
+                if (xhrExcluir.readyState == 4 && xhrExcluir.status == 200) {
+                    loadData();
+                    console.log(xhrExcluir.responseText);
+                }
+            }
+            xhrExcluir.send(formDataExcluir);
+            break;
+    }
 }
