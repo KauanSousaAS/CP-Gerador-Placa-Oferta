@@ -62,4 +62,28 @@ class ItemModel
     {
         // Excluir códigos pelo ID do produto
     }
+
+    public function pesquisarCodigo($codigo)
+    {
+        $sql = "SELECT fk_produto FROM tb_item WHERE codigo = ? GROUP BY fk_produto";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("i", $codigo);
+
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+
+        $codigos = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $codigos[] = $row;
+        }
+
+        return $codigos;
+    }
 }

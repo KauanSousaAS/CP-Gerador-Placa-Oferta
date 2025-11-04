@@ -17,10 +17,6 @@ $controller->validarSessao();
 
 <body>
     <h3>Lista</h3>
-    <a href="../"><button>Voltar</button></a>
-    <a href="../cadastros/produto/cadastrar/"><button>Cadastrar Novo Produto</button></a>
-
-    <br><br>
 
     <select name="seletorFilial" id="seletorFilial" onchange="carregarProdutoFilial(this.value);">
         <option selected disabled> -- SELECIONE A FILIAL -- </option>
@@ -31,6 +27,7 @@ $controller->validarSessao();
     <label for="pesquisarProduto">Adicionar Produto</label><br>
     <input type="text" name="pesquisarProduto" id="pesquisarProduto" placeholder="Pesquisar..." onkeyup="pesquisarProdutoFilial(this.value);">
     <div id="resultadoPesquisa" class="resultadoPesquisa"></div>
+    <a href="../cadastros/produto/cadastrar/"><button>Cadastrar Novo Produto</button></a>
     <button type="button" onclick="carregarProdutoFilial(document.getElementById('seletorFilial').value)">Atualizar</button>
 
     <br><br>
@@ -61,9 +58,10 @@ $controller->validarSessao();
 
     <br><br>
 
-    <button type="button" onclick="excluir();">Excluir</button>
-    <button type="button" onclick="concluir();">Concluir</button>
+    <a href="../"><button>Voltar</button></a>
     <button type="button" onclick="exibir();">Exibir</button>
+    <button type="button" onclick="concluir();">Concluir</button>
+    <button type="button" onclick="retirar();">Retirar</button>
 </body>
 
 <link rel="stylesheet" href="/assets/css/views/lista/lista.css">

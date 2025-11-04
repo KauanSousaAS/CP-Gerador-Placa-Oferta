@@ -249,70 +249,74 @@ function exibir() {
     };
 }
 
-function excluir() {
-    fetch('/index.php/filialProduto/excluir', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            ids: capturarSelecionados(),
-            filial: document.getElementById('seletorFilial').value
+function retirar() {
+    if (confirm("Deseja realmente retirar o(s) produto(s) da lista da filial selecionada?")) {
+        fetch('/index.php/filialProduto/retirar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ids: capturarSelecionados(),
+                filial: document.getElementById('seletorFilial').value
+            })
         })
-    })
-        .then(response => {
-            if (!response.ok) {
-                // Se status for 400, 404, 500 etc.
-                return response.json().then(err => {
-                    // Exibi o erro no console, caso houver.
-                    if (err.erro != null) {
-                        alert(err.erro);
-                    } else {
-                        throw new Error("Erro desconhecido");
-                    }
-                });
-            }
-            return response.text();
-        })
-        .then(data => {
-            carregarProdutoFilial(document.getElementById('seletorFilial').value);
-        })
-        .catch(error => {
-            console.error('Erro na requisição:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    // Se status for 400, 404, 500 etc.
+                    return response.json().then(err => {
+                        // Exibi o erro no console, caso houver.
+                        if (err.erro != null) {
+                            alert(err.erro);
+                        } else {
+                            throw new Error("Erro desconhecido");
+                        }
+                    });
+                }
+                return response.text();
+            })
+            .then(data => {
+                carregarProdutoFilial(document.getElementById('seletorFilial').value);
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
 }
 
 function concluir() {
-    fetch('/index.php/filialProduto/concluir', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            ids: capturarSelecionados(),
-            filial: document.getElementById('seletorFilial').value
+    if (confirm("Deseja realmente concluir o(s) produto(s) selecionados?")) {
+        fetch('/index.php/filialProduto/concluir', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ids: capturarSelecionados(),
+                filial: document.getElementById('seletorFilial').value
+            })
         })
-    })
-        .then(response => {
-            if (!response.ok) {
-                // Se status for 400, 404, 500 etc.
-                return response.json().then(err => {
-                    // Exibi o erro no console, caso houver.
-                    if (err.erro != null) {
-                        alert(err.erro);
-                    } else {
-                        throw new Error("Erro desconhecido");
-                    }
-                });
-            }
-            return response.text();
-        })
-        .then(data => {
-            carregarProdutoFilial(document.getElementById('seletorFilial').value);
-        })
-        .catch(error => {
-            console.error('Erro na requisição:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    // Se status for 400, 404, 500 etc.
+                    return response.json().then(err => {
+                        // Exibi o erro no console, caso houver.
+                        if (err.erro != null) {
+                            alert(err.erro);
+                        } else {
+                            throw new Error("Erro desconhecido");
+                        }
+                    });
+                }
+                return response.text();
+            })
+            .then(data => {
+                carregarProdutoFilial(document.getElementById('seletorFilial').value);
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+            });
+    }
 }
 
 // =================================================
@@ -343,51 +347,4 @@ function capturarSelecionados() {
     const ids = Array.from(checkboxes).map(cb => cb.value);
 
     return ids;
-}
-
-// será fracionado
-function acoesExecutar(acao) {
-
-    switch (acao) {
-        case "exibir":
-            const novaJanela = window.open('../pages/exibir.html', '_blank');
-
-            // Aguarda a nova aba carregar completamente
-            novaJanela.onload = function () {
-                novaJanela.postMessage({
-                    ids: ids
-                }, '*');
-            };
-            break;
-        case "concluir":
-            const formDataConcluir = new FormData();
-            formDataConcluir.append('funcao', 'concluirAssociacaoProdutoFilial');
-            formDataConcluir.append('ids', JSON.stringify(ids));
-
-            let xhrConcluir = new XMLHttpRequest();
-            xhrConcluir.open("POST", '../../php/funcoes.php', true);
-            xhrConcluir.onreadystatechange = function () {
-                if (xhrConcluir.readyState == 4 && xhrConcluir.status == 200) {
-                    loadData();
-                    console.log(xhrConcluir.responseText);
-                }
-            }
-            xhrConcluir.send(formDataConcluir);
-            break;
-        case "excluir":
-            const formDataExcluir = new FormData();
-            formDataExcluir.append('funcao', 'desvincularFilialProduto');
-            formDataExcluir.append('ids', JSON.stringify(ids));
-
-            let xhrExcluir = new XMLHttpRequest();
-            xhrExcluir.open("POST", '../../php/funcoes.php', true);
-            xhrExcluir.onreadystatechange = function () {
-                if (xhrExcluir.readyState == 4 && xhrExcluir.status == 200) {
-                    loadData();
-                    console.log(xhrExcluir.responseText);
-                }
-            }
-            xhrExcluir.send(formDataExcluir);
-            break;
-    }
 }

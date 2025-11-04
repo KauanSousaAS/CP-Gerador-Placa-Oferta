@@ -69,7 +69,7 @@ class filialProdutoController
         echo json_encode($resultado);
     }
 
-    public function excluir()
+    public function retirar()
     {
         $dados = json_decode(file_get_contents('php://input'), true);
 

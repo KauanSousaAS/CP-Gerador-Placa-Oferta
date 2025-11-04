@@ -18,6 +18,7 @@ $usuarioController->validarSessao();
     <div>
         <ul><a href="cadastros">Cadastros</a></ul>
         <ul><a href="lista">Lista</a></ul>
+        <ul><a href="atualizarPrecos">Atualizar preços</a></ul>
         <ul><a href="relatorios">Relatórios</a></ul>
         <ul><a href="logs">Logs</a></ul>
         <ul></ul>
