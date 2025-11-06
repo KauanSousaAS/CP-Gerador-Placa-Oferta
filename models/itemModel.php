@@ -65,7 +65,7 @@ class ItemModel
 
     public function pesquisarCodigo($codigo)
     {
-        $sql = "SELECT fk_produto FROM tb_item WHERE codigo = ? GROUP BY fk_produto";
+        $sql = "SELECT fk_produto FROM tb_item WHERE codigo = ?";
 
         $stmt = $this->conexao->prepare($sql);
 

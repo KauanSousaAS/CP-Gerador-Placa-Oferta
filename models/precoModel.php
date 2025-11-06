@@ -48,7 +48,13 @@ class PrecoModel {
         return $precos;
     }
 
-    public function excluir($id) {
-        // Excluir preços por ID do produto
+    public function excluir($id, $uf) {
+        $sql = "DELETE FROM tb_preco WHERE fk_produto = ? AND uf = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bind_param("is", $id, $uf);
+
+        return $stmt->execute();
     }
 }
