@@ -116,7 +116,6 @@ function cadastrar() {
         ];
     }
 
-    // Gera a requisição para encaminhamento das informações para o loginController.php.
     fetch('/index.php/produto/cadastrar', {
         method: 'POST',
         headers: {
@@ -139,9 +138,6 @@ function cadastrar() {
             return response.json();
         })
         .then(data => {
-            // Exibe uma mensagem de sucesso.
-            // alert('Produto cadastrado com sucesso!');
-
             // Redireciona para a página de listagem de produtos.
             if (data.redirect) {
                 window.location.href = data.redirect;
@@ -161,6 +157,88 @@ function cadastrar() {
 // Iniciar a requisição para edição de produto.
 function editar() {
 
+    // Desativa o botão de Salvar para evitar multiplas inserções.
+    document.getElementById('butaoSalvar').disabled = true;
+
+    // Captura as informações do produto e preparando o array para envio.
+    const venda = document.getElementById('venda').value;
+
+    const dadosEditar = {
+        id_produto: new URL(window.location.href).searchParams.get("id_produto"),
+        status: document.getElementById('status').checked, // checkbox
+        manual: document.getElementById('manual').checked, // checkbox
+        codigo: document.getElementById('codigo').value,
+        descricao: document.getElementById('descricao').value,
+        volume: document.getElementById('volume').value,
+        venda: venda
+    };
+
+    // Se for unitário, adiciona apenas valor unitário
+    if (venda === "UN") {
+        dadosEditar.valorUnt = {
+            precoPr: document.getElementById('valorUntPr').value,
+            precoMs: document.getElementById('valorUntMs').value
+        };
+    }
+
+    // Se for por quantidade, adiciona estrutura de quantidade
+    if (venda === "QN") {
+        dadosEditar.valorQnt = [
+            {
+                quantidade: document.getElementById('umQnt').value,
+                precoPr: document.getElementById('umVlrPrQnt').value,
+                precoMs: document.getElementById('umVlrMsQnt').value
+            },
+            {
+                quantidade: document.getElementById('doisQnt').value,
+                precoPr: document.getElementById('doisVlrPrQnt').value,
+                precoMs: document.getElementById('doisVlrMsQnt').value
+            },
+            {
+                quantidade: document.getElementById('tresQnt').value,
+                precoPr: document.getElementById('tresVlrPrQnt').value,
+                precoMs: document.getElementById('tresVlrMsQnt').value
+            }
+        ];
+    }
+
+
+    fetch('/index.php/produto/editar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosEditar)
+    })
+        .then(response => {
+            if (!response.ok) {
+                // Se status for 400, 404, 500 etc.
+                return response.json().then(err => {
+                    // Exibi o erro no console, caso houver.
+                    if (err.erro != null) {
+                        alert(err.erro);
+                    } else {
+                        throw new Error("Erro desconhecido");
+                    }
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Redireciona para a página de listagem de produtos.
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else if (data.erroLogin || data.erro) {
+                alert(data.erroLogin || data.erro);
+            }
+        })
+        .catch(error => {
+            // Ativa novamente o botão de Salvar após a resposta da requisição.
+            document.getElementById('butaoSalvar').disabled = false;
+
+            // Retorna o erro no console.error.
+            console.error('Erro na requisição:', error);
+        });
 }
 
 function buscar() {

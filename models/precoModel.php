@@ -62,12 +62,20 @@ class PrecoModel
 
     public function excluir($id, $uf)
     {
-        $sql = "DELETE FROM tb_preco WHERE fk_produto = ? AND uf = ?";
+        $sql = "DELETE FROM tb_preco WHERE fk_produto = ?";
+
+        if ($uf !== null) {
+            $sql .= " AND uf = ?";
+        }
 
         $stmt = $this->conexao->prepare($sql);
 
-        $stmt->bind_param("is", $id, $uf);
-
+        if ($uf !== null) {
+            $stmt->bind_param("is", $id, $uf);
+        } else {
+            $stmt->bind_param("i", $id);
+        }
+        
         return $stmt->execute();
     }
 }

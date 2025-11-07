@@ -60,7 +60,17 @@ class ItemModel
 
     public function excluir($id)
     {
-        // Excluir códigos pelo ID do produto
+        $sql = "DELETE FROM tb_item WHERE fk_produto = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar exclusão: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        return $stmt->execute();
     }
 
     public function pesquisarCodigo($codigo)

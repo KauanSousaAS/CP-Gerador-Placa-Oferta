@@ -137,7 +137,7 @@ $controller->validarSessao();
         <br>
     </form>
     <a href="../index.php"><button>Cancelar</button></a>
-    <button id="butaoSalvar" onclick="salvar();">Salvar</button>
+    <button id="butaoSalvar" onclick="editar();">Salvar</button>
 </body>
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/cadastrar.css">
 <script src="/assets/js/views/cadastros/produto.js"></script>

@@ -40,6 +40,21 @@ class ProdutoModel
         }
     }
 
+    public function editar()
+    {
+        $stmt = $this->conexao->prepare("UPDATE tb_produto SET descricao = ?, venda = ?, manual = ?, volume = ?, status = ? WHERE id_produto = ?");
+        $stmt->bind_param(
+            "ssisii",
+            $this->descricao,
+            $this->venda,
+            $this->manual,
+            $this->volume,
+            $this->status,
+            $this->idProduto
+        );
+        $stmt->execute();
+    }
+
     public function buscar($id)
     {
         $sql = "SELECT * FROM tb_produto";

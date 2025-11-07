@@ -115,6 +115,99 @@ class produtoController
         ]);
     }
 
+    public function editar()
+    {
+        $dados = json_decode(file_get_contents('php://input'), true);
+
+        require_once(__DIR__ . '/../models/produtoModel.php');
+
+        $produtoModel = new produtoModel();
+
+        $produtoModel->idProduto = $dados['id_produto'];
+        $produtoModel->status = $dados['status'] ? 1 : 0;
+        $produtoModel->manual = $dados['manual'] ? 1 : 0;
+        $produtoModel->descricao = $dados['descricao'];
+        $produtoModel->venda = $dados['venda'];
+        $produtoModel->volume = $dados['volume'];
+
+        $produtoModel->editar();
+
+        
+        require_once(__DIR__ . '/../models/itemModel.php');
+        $itemModel = new itemModel();
+        $itemModel->excluir($produtoModel->idProduto);
+        
+        $codigos = explode(";", $dados['codigo']);
+
+        foreach ($codigos as $cod) {
+            $itemModel = new itemModel();
+
+            $itemModel->codigo = intval($cod);
+            $itemModel->fkProduto = $produtoModel->idProduto;
+
+            $itemModel->cadastrar();
+        }
+
+        require_once(__DIR__ . '/../models/precoModel.php');
+
+        $precoModel = new precoModel();
+        $precoModel->excluir($produtoModel->idProduto, null);
+        $precos = [];
+
+        switch ($dados['venda']) {
+            case "UN":
+                $precosRecebidos = $dados['valorUnt'];
+
+                $precos[] = $this->prepararPrecoParaCadastro(
+                    $this->converterValorStringDouble($this->validarPreco($precosRecebidos['precoPr'])),
+                    1,
+                    "PR"
+                );
+
+                $precos[] = $this->prepararPrecoParaCadastro(
+                    $this->converterValorStringDouble($this->validarPreco($precosRecebidos['precoMs'])),
+                    1,
+                    "MS"
+                );
+                break;
+            case "QN":
+                $precosRecebidos = $dados['valorQnt'];
+
+                foreach ($precosRecebidos as $preco) {
+
+                    $precos[] = $this->prepararPrecoParaCadastro(
+                        $this->converterValorStringDouble($this->validarPreco($preco['precoPr'])),
+                        intval($preco['quantidade']),
+                        "PR"
+                    );
+
+                    $precos[] = $this->prepararPrecoParaCadastro(
+                        $this->converterValorStringDouble($this->validarPreco($preco['precoMs'])),
+                        intval($preco['quantidade']),
+                        "MS"
+                    );
+                }
+                break;
+        }
+
+        foreach ($precos as $preco) {
+            $precoModel = new precoModel();
+
+            $precoModel->preco = $preco['preco'];
+            $precoModel->quantidade = $preco['quantidade'];
+            $precoModel->uf = $preco['uf'];
+            $precoModel->fkProduto = $produtoModel->idProduto;
+
+            $precoModel->cadastrar();
+        }
+
+        // Redireciona para a página de produtos após a edição
+        http_response_code(200); // <-- Define o código de sucesso HTTP
+        echo json_encode([
+            'redirect' => '../',
+        ]);
+    }
+
     public function listar(){
         require_once(__DIR__ . '/../models/produtoModel.php');
         require_once(__DIR__ . '/../models/itemModel.php');
