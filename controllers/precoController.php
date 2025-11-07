@@ -81,25 +81,13 @@ class precoController
                         continue;
                     }
                     
-                    if ($p[0]['venda'] == "QN" && count($produto) >= 1 && count($produto) <= 3) {
+                    if ($p[0]['venda'] == "QN" && count($produto) == 3) {
                         foreach ($produto as $pItem) {
                             $precoModel = new precoModel($pItem['preco'], $pItem['quantidade'], $uf, $id['fk_produto']);
                             $precoModel->cadastrar();
                         }
                         continue;
                     }
-
-                    // Atribui os novos preços
-
-                    // $precoModel->preco = $p['preco'];
-                    // $precoModel->quantidade = $p['quantidade'];
-                    // $precoModel->uf = $uf;
-                    // $precoModel->fkProduto = $id['fk_produto'];
-
-                    // Cadastra os novos preços no banco de dados
-
-                    // $precoModel = new precoModel($p['preco'], $p['quantidade'], $uf, $id['fk_produto']);
-                    // $precoModel->cadastrar();
                 }
             }
         }

@@ -48,7 +48,7 @@ function listarProdutos() {
                         construtor.criar("a", {
                             href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
                         }, [
-                            produto.descricao 
+                            produto.descricao
                         ])
                     ]),
                     construtor.criar("td", {}, ["visualizar"]),
@@ -68,8 +68,6 @@ function listarProdutos() {
             console.error('Erro na requisição:', error);
         });
 }
-
-
 
 // Iniciar a requisição para cadastro de produto.
 function cadastrar() {
@@ -160,9 +158,91 @@ function cadastrar() {
         });
 }
 
+// Iniciar a requisição para edição de produto.
+function editar() {
+
+}
+
+function buscar() {
+    var idProduto = new URL(window.location.href).searchParams.get("id_produto");
+
+    fetch(`/index.php/produto/buscar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_produto: idProduto })
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    if (err.erro != null) {
+                        alert(err.erro);
+                    } else {
+                        throw new Error("Erro desconhecido");
+                    }
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            // Preenche os campos do formulário com os dados retornados.
+            document.getElementById('status').checked = data.status == 1;
+            document.getElementById('manual').checked = data.manual == 1;
+            document.getElementById('codigo').value = data.codigos.join(';') || '';
+            document.getElementById('descricao').value = data.descricao || '';
+            document.getElementById('volume').value = data.volume || '';
+            document.getElementById('venda').value = data.venda || 'UN';
+
+            // Chama a função para ajustar os campos de valor conforme o tipo de venda.
+            verificarTipoVenda();
+            if (data.venda === "UN") {
+                data.precos.forEach(preco => {
+                    console.log(preco);
+                    if (preco.uf == "PR") {
+                        document.getElementById('valorUntPr').value = formatarValor(preco.preco) || '';
+                    }
+                    if (preco.uf == "MS") {
+                        document.getElementById('valorUntMs').value = formatarValor(preco.preco) || '';
+                    }
+                })
+            } else if (data.venda === "QN") {
+                var precosPR = [];
+                var precosMS = [];
+                
+                data.precos.forEach(preco => {
+                    if (preco.uf == "PR") {
+                        precosPR.push(preco);
+                    } else if (preco.uf == "MS") {
+                        precosMS.push(preco);
+                    }
+                })
+
+                if (precosPR[0].quantidade == precosMS[0].quantidade) {
+                    document.getElementById('umQnt').value = precosPR[0].quantidade || '';
+                }
+                document.getElementById('umVlrPrQnt').value = formatarValor(precosPR[0].preco) || '';
+                document.getElementById('umVlrMsQnt').value = formatarValor(precosMS[0].preco) || '';
+
+                if (precosPR[1].quantidade == precosMS[1].quantidade) {
+                    document.getElementById('umQnt').value = precosPR[1].quantidade || '';
+                }
+                document.getElementById('doisVlrPrQnt').value = formatarValor(precosPR[1].preco) || '';
+                document.getElementById('doisVlrMsQnt').value = formatarValor(precosMS[1].preco) || '';
+
+                if (precosPR[2].quantidade == precosMS[2].quantidade) {
+                    document.getElementById('umQnt').value = precosPR[2].quantidade || '';
+                }
+                document.getElementById('tresVlrPrQnt').value = formatarValor(precosPR[2].preco) || '';
+                document.getElementById('tresVlrMsQnt').value = formatarValor(precosMS[2].preco) || '';
+            }
+        });
+}
 
 // Obtém o elemento select e o parágrafo para exibir o resultado.
 const vendaSelect = document.getElementById('venda');
+
 // Função para verificar o valor selecionado.
 function verificarTipoVenda() {
     const venda = vendaSelect.value;
@@ -174,6 +254,11 @@ function verificarTipoVenda() {
         document.getElementById('telaValorQuantidade').style.display = 'block';
         document.getElementById('telaValorUnitario').style.display = 'none';
     }
+}
+
+function formatarValor(valor) {
+    var valorFormatado = valor.toFixed(2).replace('.', ',');
+    return valorFormatado;
 }
 
 // Adiciona o evento change ao select.

@@ -115,8 +115,7 @@ class produtoController
         ]);
     }
 
-    public function listar()
-    {
+    public function listar(){
         require_once(__DIR__ . '/../models/produtoModel.php');
         require_once(__DIR__ . '/../models/itemModel.php');
         // require_once(__DIR__ . '/../models/precoModel.php');
@@ -128,9 +127,7 @@ class produtoController
         $produtos = $produtoModel->buscar(null);
 
         foreach ($produtos as &$produto) {
-
             $i = $itemModel->buscar($produto['id_produto']);
-
             $produto['codigos'] = array_column($i, 'codigo');
         }
 
@@ -170,6 +167,30 @@ class produtoController
         }
 
         echo json_encode($produtos);
+    }
+
+    public function buscar(){
+        $dados = json_decode(file_get_contents('php://input'), true);
+
+        $id = $dados['id_produto'];
+
+        require_once(__DIR__ . '/../models/produtoModel.php');
+        require_once(__DIR__ . '/../models/itemModel.php');
+        require_once(__DIR__ . '/../models/precoModel.php');
+
+        $produtoModel = new produtoModel();
+        $itemModel = new itemModel();
+        $precoModel = new precoModel();
+
+        $produto = $produtoModel->buscar($id)[0];
+
+        $itens = $itemModel->buscar($produto['id_produto']);
+        $produto['codigos'] = array_column($itens, 'codigo');
+
+        $precos = $precoModel->buscar($produto['id_produto'], null);
+        $produto['precos'] = $precos;
+
+        echo json_encode($produto);
     }
 
 

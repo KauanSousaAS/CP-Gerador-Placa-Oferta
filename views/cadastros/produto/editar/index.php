@@ -140,11 +140,14 @@ $controller->validarSessao();
     <button id="butaoSalvar" onclick="salvar();">Salvar</button>
 </body>
 <link rel="stylesheet" href="/assets/css/views/cadastros/produto/cadastrar.css">
-<script src="/assets/js/views/cadastros/produto/produto.js"></script>
+<script src="/assets/js/views/cadastros/produto.js"></script>
 
 <script>
     // Garante que tipoVenda seja iniciado para o cadastro.
     verificarTipoVenda();
+
+    // Busca os dados do produto para edição.
+    buscar();
 </script>
 
 </html>
