@@ -210,7 +210,7 @@ function buscar() {
             } else if (data.venda === "QN") {
                 var precosPR = [];
                 var precosMS = [];
-                
+
                 data.precos.forEach(preco => {
                     if (preco.uf == "PR") {
                         precosPR.push(preco);
@@ -226,13 +226,13 @@ function buscar() {
                 document.getElementById('umVlrMsQnt').value = formatarValor(precosMS[0].preco) || '';
 
                 if (precosPR[1].quantidade == precosMS[1].quantidade) {
-                    document.getElementById('umQnt').value = precosPR[1].quantidade || '';
+                    document.getElementById('doisQnt').value = precosPR[1].quantidade || '';
                 }
                 document.getElementById('doisVlrPrQnt').value = formatarValor(precosPR[1].preco) || '';
                 document.getElementById('doisVlrMsQnt').value = formatarValor(precosMS[1].preco) || '';
 
                 if (precosPR[2].quantidade == precosMS[2].quantidade) {
-                    document.getElementById('umQnt').value = precosPR[2].quantidade || '';
+                    document.getElementById('tresQnt').value = precosPR[2].quantidade || '';
                 }
                 document.getElementById('tresVlrPrQnt').value = formatarValor(precosPR[2].preco) || '';
                 document.getElementById('tresVlrMsQnt').value = formatarValor(precosMS[2].preco) || '';
