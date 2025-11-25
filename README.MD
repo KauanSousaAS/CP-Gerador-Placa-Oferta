@@ -1,5 +1,3 @@
--- Altere o nome do arquivo para bd_pdo.sql e importe
-
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
