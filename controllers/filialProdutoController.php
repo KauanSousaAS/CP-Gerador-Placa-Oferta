@@ -7,40 +7,12 @@ class filialProdutoController
         $dados = json_decode(file_get_contents('php://input'), true);
 
         require_once(__DIR__ . '/../models/filialProdutoModel.php');
-        require_once(__DIR__ . '/../models/produtoModel.php');
-        require_once(__DIR__ . '/../models/itemModel.php');
 
         $filialProdutoModel = new filialProdutoModel();
-        $produtoModel = new produtoModel();
-        $itemModel = new itemModel();
+        
+        $produtos = $filialProdutoModel->buscarProdutosFilial(intval($dados['id_filial']));
 
-        $filialProdutos = $filialProdutoModel->buscar(intval($dados['id_filial']));
-
-        $resultado = [];
-
-        if (!($filialProdutos === null)) {
-
-            foreach ($filialProdutos as &$produto) {
-                $produto['situacao'] = $produto['status'];
-
-                unset($produto['status']);
-
-                $p = $produtoModel->buscar($produto['fk_produto']);
-
-                $p = $p[0];
-
-                $c = $itemModel->buscar($produto['fk_produto']);
-
-                $p['codigos'] = array_column($c, 'codigo');
-
-                unset($p['id_produto']);
-
-                $produto = array_merge($produto, $p);
-
-                $resultado[] = $produto;
-            }
-        }
-        echo json_encode($resultado);
+        echo json_encode($produtos);
     }
 
     public function pesquisar()

@@ -162,19 +162,19 @@ function carregarProdutoFilial(id_filial) {
                             type: "checkbox",
                             class: "produtoSelecionado",
                             name: "produtoSelecionado",
-                            value: produto.fk_produto
+                            value: produto.id_produto
                         })
                     ]),
                     construtor.criar("td", {}, [
                         construtor.criar("a", {
-                            href: `/views/cadastros/produto/editar?id_produto=${produto.fk_produto}`
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
                         }, [
-                            produto.codigos.join(";")
+                            produto.codigos
                         ])
                     ]),
                     construtor.criar("td", {}, [
                         construtor.criar("a", {
-                            href: `/views/cadastros/produto/editar?id_produto=${produto.fk_produto}`
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
                         }, [
                             produto.descricao
                         ])
@@ -187,7 +187,7 @@ function carregarProdutoFilial(id_filial) {
                     construtor.criar("td", {}, [
                         construtor.criar("button", {
                             type: "button",
-                            onclick: () => console.log(produto.fk_produto, document.getElementById('seletorFilial').value)
+                            onclick: () => console.log(produto.id_produto, document.getElementById('seletorFilial').value)
                         }, ["Botão"])
                     ])
                 ]);
@@ -317,6 +317,10 @@ function concluir() {
                 console.error('Erro na requisição:', error);
             });
     }
+}
+
+function selecionar(){
+    let teste = document.getElementById("selecionarTodos").checked;
 }
 
 // =================================================

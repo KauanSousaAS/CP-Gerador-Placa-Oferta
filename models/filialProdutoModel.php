@@ -55,6 +55,46 @@ class FilialProdutoModel
         return empty($lista) ? null : $lista;
     }
 
+    public function buscarProdutosFilial($id_filial){
+        if ($id_filial === null) {
+            throw new Exception("ID da filial não fornecido.");
+        }
+
+        $sql = 
+        "SELECT p.id_produto, p.descricao, p.venda, p.manual, p.volume, p.status, fp.ultimo_exibir, fp.estoque_filial, fp.status as situacao, GROUP_CONCAT(i.codigo SEPARATOR ';') AS codigos
+        FROM tb_produto p 
+        INNER JOIN tb_filial_produto fp ON p.id_produto = fp.fk_produto
+        INNER JOIN tb_item i ON p.id_produto = i.fk_produto
+        WHERE fp.fk_filial = ? 
+        GROUP BY p.id_produto
+        ORDER BY p.descricao;";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        $stmt->bind_param("i", $id_filial);
+
+        if (!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        if (!$stmt->execute()) {
+            throw new Exception("Erro ao executar consulta: " . $stmt->error);
+        }
+
+        $resultado = $stmt->get_result();
+
+        if (!$resultado) {
+            throw new Exception("Erro ao obter resultados: " . $stmt->error);
+        }
+
+        $lista = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $lista[] = $row;
+        }
+
+        return empty($lista) ? null : $lista;
+    }
+
 
     public function pesquisarProdutoFilial($id_filial, $pesquisa)
     {

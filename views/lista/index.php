@@ -47,7 +47,7 @@ $controller->validarSessao();
                 <th>Manual</th>
                 <th>Estoque</th>
                 <th>Situação</th>
-                <th>Última Emissão</th>
+                <th>Última Tiragem</th>
                 <th>Status</th>
                 <th>Ações</th>
             </tr>
