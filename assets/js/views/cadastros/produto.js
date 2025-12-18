@@ -37,14 +37,14 @@ function listarProdutos() {
                             value: produto.id_produto
                         })
                     ]),
-                    construtor.criar("td", {}, [
+                    construtor.criar("td", {class: "produtoCodigo"}, [
                         construtor.criar("a", {
                             href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
                         }, [
                             produto.codigos.join(";")
                         ])
                     ]),
-                    construtor.criar("td", {}, [
+                    construtor.criar("td", {class: "produtoDescricao"}, [
                         construtor.criar("a", {
                             href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
                         }, [

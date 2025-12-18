@@ -157,7 +157,7 @@ function carregarProdutoFilial(id_filial) {
             data.forEach(function (produto) {
                 // Cria uma nova linha na tabela para cada produto
                 let linhaProduto = construtor.criar("tr", {}, [
-                    construtor.criar("td", {}, [
+                    construtor.criar("td", {class: "produtoSeletor"}, [
                         construtor.criar("input", {
                             type: "checkbox",
                             class: "produtoSelecionado",
@@ -165,27 +165,27 @@ function carregarProdutoFilial(id_filial) {
                             value: produto.id_produto
                         })
                     ]),
-                    construtor.criar("td", {}, [
+                    construtor.criar("td", {class: "produtoCodigo"}, [
                         construtor.criar("a", {
                             href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`,
-                            class: "codigoProduto"
+                            
                         }, [
                             produto.codigos
                         ])
                     ]),
-                    construtor.criar("td", {}, [
+                    construtor.criar("td", {class: "produtoDescricao"}, [
                         construtor.criar("a", {
                             href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
                         }, [
                             produto.descricao
                         ])
                     ]),
-                    construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
-                    construtor.criar("td", {}, [produto.estoque_filial]),
-                    construtor.criar("td", { value: produto.situacao }, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : (produto.situacao == 0 ? "Desativado" : "Erro"))]),
-                    construtor.criar("td", {}, [formatarDataHora(produto.ultimo_exibir)]),
-                    construtor.criar("td", {}, [produto.status == 1 ? "Ativo" : "Inativo"]),
-                    construtor.criar("td", {}, [
+                    construtor.criar("td", {class: "produtoManual"}, [produto.manual == 1 ? "Sim" : "Não"]),
+                    construtor.criar("td", {class: "produtoEstoque"}, [produto.estoque_filial]),
+                    construtor.criar("td", {class: "produtoSituacao", value: produto.situacao }, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : (produto.situacao == 0 ? "Desativado" : "Erro"))]),
+                    construtor.criar("td", {class: "produtoUltimoExibir"}, [formatarDataHora(produto.ultimo_exibir)]),
+                    construtor.criar("td", {class: "produtoStatus"}, [produto.status == 1 ? "Ativo" : "Inativo"]),
+                    construtor.criar("td", {class: "produtoAcoes"}, [
                         construtor.criar("button", {
                             type: "button",
                             onclick: () => console.log(produto.id_produto, document.getElementById('seletorFilial').value)

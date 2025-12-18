@@ -17,20 +17,23 @@ $controller->validarSessao();
 
 <body>
     <h3>Produto</h3>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Código(s)</th>
-                <th class="textoEsquerda">Descrição</th>
-                <th>Preço(s)</th>
-                <th>Manual</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody id="listaProdutos">
-        </tbody>
-    </table>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Código(s)</th>
+                    <th class="textoEsquerda">Descrição</th>
+                    <th>Preço(s)</th>
+                    <th>Manual</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaProdutos">
+            </tbody>
+        </table>
+    </div>
     <a href="../"><button>Voltar</button></a>
     <select name="selecao" id="selecao">
         <option selected> -- sem seleção -- </option>

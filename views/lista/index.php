@@ -30,33 +30,30 @@ $controller->validarSessao();
     <a href="../cadastros/produto/cadastrar/"><button>Cadastrar Novo Produto</button></a>
     <button type="button" onclick="carregarProdutoFilial(document.getElementById('seletorFilial').value)">Atualizar</button>
 
-    <br><br>
-
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    <select name="selecaoProdutosLista" id="selecaoProdutosLista" onchange="marcarCheckboxs(this.value);">
-                        <option value=0 selected>--</option>
-                        <option value=1>T</option>
-                        <option value=2>P</option>
-                    </select>
-                </th>
-                <th>Código(s)</th>
-                <th class="textoEsquerda">Descrição</th>
-                <th>Manual</th>
-                <th>Estoque</th>
-                <th>Situação</th>
-                <th>Última Tiragem</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <br>
-        <tbody id="listaProdutosFilial"></tbody>
-    </table>
-
-    <br><br>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <select name="selecaoProdutosLista" id="selecaoProdutosLista" onchange="marcarCheckboxs(this.value);">
+                            <option value=0 selected>--</option>
+                            <option value=1>T</option>
+                            <option value=2>P</option>
+                        </select>
+                    </th>
+                    <th>Código(s)</th>
+                    <th class="textoEsquerda">Descrição</th>
+                    <th>Manual</th>
+                    <th>Estoque</th>
+                    <th>Situação</th>
+                    <th>Última Tiragem</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaProdutosFilial"></tbody>
+        </table>
+    </div>
 
     <a href="../"><button>Voltar</button></a>
     <button type="button" onclick="exibir();">Exibir</button>
