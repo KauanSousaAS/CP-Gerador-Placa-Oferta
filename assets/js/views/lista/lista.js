@@ -167,7 +167,8 @@ function carregarProdutoFilial(id_filial) {
                     ]),
                     construtor.criar("td", {}, [
                         construtor.criar("a", {
-                            href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`
+                            href: `/views/cadastros/produto/editar?id_produto=${produto.id_produto}`,
+                            class: "codigoProduto"
                         }, [
                             produto.codigos
                         ])
@@ -181,7 +182,7 @@ function carregarProdutoFilial(id_filial) {
                     ]),
                     construtor.criar("td", {}, [produto.manual == 1 ? "Sim" : "Não"]),
                     construtor.criar("td", {}, [produto.estoque_filial]),
-                    construtor.criar("td", {}, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : (produto.situacao == 0 ? "Desativado" : "Erro"))]),
+                    construtor.criar("td", { value: produto.situacao }, [produto.situacao == 2 ? "Pendente" : (produto.situacao == 1 ? "Feito" : (produto.situacao == 0 ? "Desativado" : "Erro"))]),
                     construtor.criar("td", {}, [formatarDataHora(produto.ultimo_exibir)]),
                     construtor.criar("td", {}, [produto.status == 1 ? "Ativo" : "Inativo"]),
                     construtor.criar("td", {}, [
@@ -319,7 +320,7 @@ function concluir() {
     }
 }
 
-function selecionar(){
+function selecionar() {
     let teste = document.getElementById("selecionarTodos").checked;
 }
 
@@ -351,4 +352,33 @@ function capturarSelecionados() {
     const ids = Array.from(checkboxes).map(cb => cb.value);
 
     return ids;
+}
+
+// Marcar checkboxs na lista de produtos
+function marcarCheckboxs(selecionar) {
+    const lista = document.getElementById("listaProdutosFilial");
+
+    const linhas = lista.querySelectorAll('tr');
+
+    linhas.forEach(linha => {
+        const produto = linha.querySelectorAll('td');
+
+        switch (selecionar) {
+            case "1": // Todos
+                produto[0].querySelector('input[type="checkbox"]').checked = true;
+                break;
+            case "2": // Pendentes
+                if (produto[5].getAttribute("value") == "2") {
+                    produto[0].querySelector('input[type="checkbox"]').checked = true;
+                } else {
+                    produto[0].querySelector('input[type="checkbox"]').checked = false;
+                }
+                break;
+            default: // Nenhum
+                produto[0].querySelector('input[type="checkbox"]').checked = false;
+                break;
+        }
+    });
+
+    console.log(selecionar);
 }

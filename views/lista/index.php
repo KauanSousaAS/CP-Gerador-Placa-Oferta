@@ -36,10 +36,10 @@ $controller->validarSessao();
         <thead>
             <tr>
                 <th>
-                    <select name="selecaoProdutosLista" id="selecaoProdutosLista">
-                        <option selected>--</option>
-                        <option value="1">T</option>
-                        <option value="2">P</option>
+                    <select name="selecaoProdutosLista" id="selecaoProdutosLista" onchange="marcarCheckboxs(this.value);">
+                        <option value=0 selected>--</option>
+                        <option value=1>T</option>
+                        <option value=2>P</option>
                     </select>
                 </th>
                 <th>Código(s)</th>
