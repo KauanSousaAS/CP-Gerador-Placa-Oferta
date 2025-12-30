@@ -197,4 +197,24 @@ class FilialProdutoModel
             throw new Exception("Erro ao alterar o status do produto pela filial: " . $this->conexao->error);
         }
     }
+
+    public function pendente($produto, $uf){
+        $sql = "UPDATE tb_filial_produto SET status = 2 WHERE fk_produto = ? AND fk_filial IN (SELECT id_filial FROM tb_filial WHERE uf = ?);";
+
+        $stmt = $this->conexao->prepare($sql);
+
+        if(!$stmt) {
+            throw new Exception("Erro ao preparar consulta: " . $this->conexao->error);
+        }
+
+        $stmt->bind_param("is", $produto, $uf);
+
+        if (!$stmt){
+            throw new Exception("Erro ao inserir os dados da consulta: " . $this->conexao->error);
+        }
+
+        if(!$stmt->execute()){
+            throw new Exception("Erro ao alterar o status do produto pela filial: " . $this->conexao->error);
+        }
+    }
 }

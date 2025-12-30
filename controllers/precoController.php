@@ -35,6 +35,7 @@ class precoController
         require_once(__DIR__ . '/../models/itemModel.php');
         require_once(__DIR__ . '/../models/produtoModel.php');
         require_once(__DIR__ . '/../models/precoModel.php');
+        require_once(__DIR__ . '/../models/filialProdutoModel.php');
 
         // echo json_encode($dadosUpdate);
 
@@ -78,6 +79,10 @@ class precoController
                             $precoModel = new precoModel($pItem['preco'], $pItem['quantidade'], $uf, $id['fk_produto']);
                             $precoModel->cadastrar();
                         }
+
+                        $filialProdutoModel = new filialProdutoModel();
+                        $filialProdutoModel->pendente($id['fk_produto'], $uf);
+
                         continue;
                     }
                     
@@ -86,10 +91,16 @@ class precoController
                             $precoModel = new precoModel($pItem['preco'], $pItem['quantidade'], $uf, $id['fk_produto']);
                             $precoModel->cadastrar();
                         }
+                        
+                        $filialProdutoModel = new filialProdutoModel();
+                        $filialProdutoModel->pendente($id['fk_produto'], $uf);
+                        
                         continue;
                     }
                 }
             }
         }
+
+        echo "Atualização de preços concluída com sucesso.";
     }
 }
